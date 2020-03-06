@@ -62,6 +62,11 @@ namespace MiniUow
             return _dbSet.AddAsync(entity, cancellationToken);
         }
 
+        public Task<T> FindAsync(params object[] keyValues)
+        {
+            return _dbSet.FindAsync(keyValues);
+        }
+
         public Task AddAsync(params T[] entities)
         {
             return _dbSet.AddRangeAsync(entities);
@@ -74,12 +79,6 @@ namespace MiniUow
             return _dbSet.AddRangeAsync(entities, cancellationToken);
         }
 
-
-        [Obsolete("Use get list ")]
-        public IEnumerable<T> GetAsync(Expression<Func<T, bool>> predicate)
-        {
-            throw new NotImplementedException();
-        }
 
         public void UpdateAsync(T entity)
         {

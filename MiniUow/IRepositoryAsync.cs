@@ -26,12 +26,13 @@ namespace MiniUow
             bool disableTracking = true,
             CancellationToken cancellationToken = default(CancellationToken));
 
+        Task<T> FindAsync(params object[] keyValues);
+
         Task AddAsync(T entity, CancellationToken cancellationToken = default(CancellationToken));
 
         Task AddAsync(params T[] entities);
 
         Task AddAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default(CancellationToken));
-
 
         void UpdateAsync(T entity);
     }

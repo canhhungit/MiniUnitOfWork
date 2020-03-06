@@ -19,9 +19,9 @@ namespace MiniUow.Paging
                 Size = size;
                 From = from;
                 Count = querable.Count();
-                Pages = (int) Math.Ceiling(Count / (double) Size);
+                Pages = (int)Math.Ceiling(Count / (double)Size);
 
-                Items = querable.Skip((Index - From) * Size).Take(Size).ToList();
+                Items = querable.Skip((Index - From) * Size).Take(Size);
             }
             else
             {
@@ -30,9 +30,9 @@ namespace MiniUow.Paging
                 From = from;
 
                 Count = enumerable.Count();
-                Pages = (int) Math.Ceiling(Count / (double) Size);
+                Pages = (int)Math.Ceiling(Count / (double)Size);
 
-                Items = enumerable.Skip((Index - From) * Size).Take(Size).ToList();
+                Items = enumerable.Skip((Index - From) * Size).Take(Size);
             }
         }
 
@@ -46,7 +46,7 @@ namespace MiniUow.Paging
         public int Size { get; set; }
         public int Count { get; set; }
         public int Pages { get; set; }
-        public IList<T> Items { get; set; }
+        public IEnumerable<T> Items { get; set; }
         public bool HasPrevious => Index - From > 0;
         public bool HasNext => Index - From + 1 < Pages;
     }
@@ -67,11 +67,11 @@ namespace MiniUow.Paging
                 Size = size;
                 From = from;
                 Count = queryable.Count();
-                Pages = (int) Math.Ceiling(Count / (double) Size);
+                Pages = (int)Math.Ceiling(Count / (double)Size);
 
                 var items = queryable.Skip((Index - From) * Size).Take(Size).ToArray();
 
-                Items = new List<TResult>(converter(items));
+                Items = (converter(items));
             }
             else
             {
@@ -79,11 +79,11 @@ namespace MiniUow.Paging
                 Size = size;
                 From = from;
                 Count = enumerable.Count();
-                Pages = (int) Math.Ceiling(Count / (double) Size);
+                Pages = (int)Math.Ceiling(Count / (double)Size);
 
                 var items = enumerable.Skip((Index - From) * Size).Take(Size).ToArray();
 
-                Items = new List<TResult>(converter(items));
+                Items = (converter(items));
             }
         }
 
@@ -96,7 +96,7 @@ namespace MiniUow.Paging
             Count = source.Count;
             Pages = source.Pages;
 
-            Items = new List<TResult>(converter(source.Items));
+            Items = (converter(source.Items));
         }
 
         public int Index { get; }
@@ -109,7 +109,7 @@ namespace MiniUow.Paging
 
         public int From { get; }
 
-        public IList<TResult> Items { get; }
+        public IEnumerable<TResult> Items { get; }
 
         public bool HasPrevious => Index - From > 0;
 

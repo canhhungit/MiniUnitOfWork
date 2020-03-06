@@ -24,7 +24,7 @@ namespace MiniUow.Paging
                 From = from,
                 Count = count,
                 Items = items,
-                Pages = (int) Math.Ceiling(count / (double) size)
+                Pages = (int)Math.Ceiling(count / (double)size)
             };
 
             return list;

@@ -14,7 +14,7 @@ namespace MiniUow.Paging
 
         int Pages { get; }
 
-        IList<T> Items { get; }
+        IEnumerable<T> Items { get; }
 
         bool HasPrevious { get; }
 
