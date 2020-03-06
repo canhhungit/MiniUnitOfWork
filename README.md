@@ -11,7 +11,7 @@ MiniUnitOfWork supports the following platforms:
 
 ## Installation
 
-The simplest method to install Threenine.Data into your solution/project is to use NuGet.:
+The simplest method to install MiniUow into your solution/project is to use NuGet.:
 
 ```bash
     nuget Install-Package MiniUow
