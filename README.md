@@ -9,6 +9,22 @@ MiniUnitOfWork supports the following platforms:
 .NET 4.5.2+
 .NET Platform Standard 2.0
 
+## Installation
+
+The simplest method to install Threenine.Data into your solution/project is to use NuGet.:
+
+```bash
+    nuget Install-Package MiniUow
+```
+
+Or via the DotNet Cli
+
+```bash
+    dotnet add package MiniUow
+```
+
+Check out [Nuget package page](https://www.nuget.org/packages/MiniUow/) for more details.
+
 ## Documentation 
 
 
