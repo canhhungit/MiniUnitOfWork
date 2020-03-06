@@ -1,6 +1,7 @@
 # Generic Repository Pattern for C# .net Core
 
 A simple lean & clean generic repository pattern for .net core  abstraction layer EntityFramework Core.
+[![Build status](https://ci.appveyor.com/api/projects/status/kju8o0abk7yiep22/branch/master?svg=true)](https://ci.appveyor.com/project/canhhungit/miniunitofwork/branch/master)
 
 MiniUnitOfWork supports the following platforms:
 .NET 4.0
