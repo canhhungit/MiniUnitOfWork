@@ -27,7 +27,8 @@ Check out [Nuget package page](https://www.nuget.org/packages/MiniUow/) for more
 
 ## Documentation 
 
-
+Startup.cs
+```bash
     public IConfiguration Configuration { get; }
 
     // This method gets called by the runtime. Use this method to add services to the container.
@@ -39,7 +40,10 @@ Check out [Nuget package page](https://www.nuget.org/packages/MiniUow/) for more
             opt.UseNpgsql(Configuration.GetConnectionString("SampleDatabase"))).AddUnitOfWork<SampleContext>();
         services.AddMvc();
     }
+```
 
+HomeController.cs
+```bash
     private readonly IUnitOfWork _uow;
     public HomeController(IUnitOfWork unit)
     {
@@ -61,7 +65,7 @@ Check out [Nuget package page](https://www.nuget.org/packages/MiniUow/) for more
         var user = _uow.GetRepository<TblUser>().Find(value);
         user = _uow.GetRepository<TblUser>().Single(p => p.Username == value);
     }
-
+```
 
 	
 	
