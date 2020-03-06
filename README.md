@@ -71,6 +71,15 @@ HomeController.cs
         var user = _uow.GetRepository<TblUser>().Find(value);
         user = _uow.GetRepository<TblUser>().Single(p => p.Username == value);
     }
+    
+    public void Create()
+	{
+	    var user =new TblUser();
+	    user.Password = CreatePasswordHash(password);
+	    user.CreateDate = DateTime.Now;
+	    _uow.GetRepository<TblUser>().Add(user);
+	    _uow.SaveChanges();
+	}
 ```
 
 	
