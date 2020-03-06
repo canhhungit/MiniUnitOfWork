@@ -2,12 +2,18 @@
 
 A simple lean & clean generic repository pattern for .net core  abstraction layer EntityFramework Core.
 
-[![Build status](https://ci.appveyor.com/api/projects/status/kju8o0abk7yiep22/branch/master?svg=true)](https://ci.appveyor.com/project/canhhungit/miniunitofwork/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/kju8o0abk7yiep22/branch/master?svg=true)](https://ci.appveyor.com/project/canhhungit/miniunitofwork/branch/master)   
+[![NuGet Badge](https://buildstats.info/nuget/MiniUow)](https://www.nuget.org/packages/MiniUow/)
 
 MiniUnitOfWork supports the following platforms:
+
 .NET 4.0
+
 .NET 4.5.2+
+
 .NET Platform Standard 2.0
+
+.NET Core
 
 ## Installation
 
