@@ -37,7 +37,7 @@ namespace MiniUow
             return await query.FirstOrDefaultAsync();
         }
 
-        public Task<IPaginate<T>> GetListAsync(Expression<Func<T, bool>> predicate = null,
+        public async Task<IPaginate<T>> GetListAsync(Expression<Func<T, bool>> predicate = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
             int index = 0,
@@ -53,8 +53,27 @@ namespace MiniUow
             if (predicate != null) query = query.Where(predicate);
 
             if (orderBy != null)
-                return orderBy(query).ToPaginateAsync(index, size, 0, cancellationToken);
-            return query.ToPaginateAsync(index, size, 0, cancellationToken);
+                return await orderBy(query).ToPaginateAsync(index, size, 0, cancellationToken);
+            return await query.ToPaginateAsync(index, size, 0, cancellationToken);
+        }
+
+        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, bool disableTracking = true, CancellationToken cancellationToken = default)
+        {
+            IQueryable<T> query = _dbSet;
+            if (disableTracking) query = query.AsNoTracking();
+
+            if (include != null) query = include(query);
+
+            if (predicate != null) query = query.Where(predicate);
+
+            if (orderBy != null)
+                return await Task.Run(() => orderBy(query).AsEnumerable());
+            return await Task.Run(() => query.AsEnumerable());
+        }
+
+        public async Task<T> FindAsync(params object[] keyValues)
+        {
+            return await _dbSet.FindAsync(keyValues);
         }
 
         public Task AddAsync(T entity, CancellationToken cancellationToken = default(CancellationToken))
@@ -62,16 +81,10 @@ namespace MiniUow
             return _dbSet.AddAsync(entity, cancellationToken);
         }
 
-        public Task<T> FindAsync(params object[] keyValues)
-        {
-            return _dbSet.FindAsync(keyValues);
-        }
-
         public Task AddAsync(params T[] entities)
         {
             return _dbSet.AddRangeAsync(entities);
         }
-
 
         public Task AddAsync(IEnumerable<T> entities,
             CancellationToken cancellationToken = default(CancellationToken))
@@ -89,5 +102,6 @@ namespace MiniUow
         {
             return AddAsync(entity, new CancellationToken());
         }
+
     }
 }

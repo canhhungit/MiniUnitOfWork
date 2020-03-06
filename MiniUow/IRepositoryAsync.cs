@@ -15,7 +15,6 @@ namespace MiniUow
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
             bool disableTracking = true);
-
         //IEnumerable<T> GetAsync(Expression<Func<T, bool>> predicate);
 
         Task<IPaginate<T>> GetListAsync(Expression<Func<T, bool>> predicate = null,
@@ -25,6 +24,12 @@ namespace MiniUow
             int size = 20,
             bool disableTracking = true,
             CancellationToken cancellationToken = default(CancellationToken));
+
+        Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> predicate = null,
+          Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+          Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
+          bool disableTracking = true,
+          CancellationToken cancellationToken = default(CancellationToken));
 
         Task<T> FindAsync(params object[] keyValues);
 
