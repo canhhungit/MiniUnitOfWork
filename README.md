@@ -40,11 +40,12 @@ Startup.cs
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-    	//using MiniUnitOfWork.DependencyInjection;
+    	//using MiniUow.DependencyInjection;
+	//.AddUnitOfWork<SampleContext>();
         // Use the MiniUnitOfWork Dependency Injection to set up the Unit of Work
+	//Sample:
         services.AddEntityFrameworkNpgsql().AddDbContext<SampleContext>(opt =>
             opt.UseNpgsql(Configuration.GetConnectionString("SampleDatabase"))).AddUnitOfWork<SampleContext>();
-        services.AddMvc();
     }
 ```
 
