@@ -9,6 +9,7 @@ MiniUnitOfWork supports the following platforms:
 
 ## Documentation 
 
+
 using MiniUnitOfWork.DependencyInjection;
 public class Startup
 {
@@ -23,8 +24,8 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         // Use the MiniUnitOfWork Dependency Injection to set up the Unit of Work
-		services.AddEntityFrameworkNpgsql().AddDbContext<SampleContext>(opt => 
-			opt.UseNpgsql(Configuration.GetConnectionString("SampleDatabase"))).AddUnitOfWork<SampleContext>();
+        services.AddEntityFrameworkNpgsql().AddDbContext<SampleContext>(opt =>
+            opt.UseNpgsql(Configuration.GetConnectionString("SampleDatabase"))).AddUnitOfWork<SampleContext>();
         services.AddMvc();
     }
 }
@@ -35,29 +36,29 @@ using MiniUnitOfWork;
 using MiniUnitOfWork.Paging;
 public class HomeController : Controller
 {
-	private readonly IUnitOfWork _uow;
-	public HomeController(IUnitOfWork unit)
-	{
-		_uow = unit;
-	}
-	
-	public void ActionMethod(string value)
-	{
-		//Demo
-		var data = _uow.GetRepository<TblUser>().GetList(
-		   predicate: p => p.Username.Contains(value) || p.Email.Contains(value) || p.Name.Contains(value),
-		   orderBy: p => p.OrderBy(p => p.Username),
-		   include: p => p.Include(x => x.TblUserGroup),
-		   index: 0,
-		   size: 20);
+    private readonly IUnitOfWork _uow;
+    public HomeController(IUnitOfWork unit)
+    {
+        _uow = unit;
+    }
 
-		var result = _uow.GetRepository<TblUser>().GetAll();
+    public void ActionMethod(string value)
+    {
+        //Demo
+        var data = _uow.GetRepository<TblUser>().GetList(
+           predicate: p => p.Username.Contains(value) || p.Email.Contains(value) || p.Name.Contains(value),
+           orderBy: p => p.OrderBy(p => p.Username),
+           include: p => p.Include(x => x.TblUserGroup),
+           index: 0,
+           size: 20);
 
-		var user = _uow.GetRepository<TblUser>().Find(value);
-		user = _uow.GetRepository<TblUser>().Single(p => p.Username == value);
-	}
+        var result = _uow.GetRepository<TblUser>().GetAll();
+
+        var user = _uow.GetRepository<TblUser>().Find(value);
+        user = _uow.GetRepository<TblUser>().Single(p => p.Username == value);
+    }
 }
-	
+
 	
 	
 	
