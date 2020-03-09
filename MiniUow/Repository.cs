@@ -1,9 +1,11 @@
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using Microsoft.EntityFrameworkCore;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MiniUow
 {
@@ -13,9 +15,11 @@ namespace MiniUow
         {
         }
 
-        public void Add(T entity)
+        public int ExecuteSqlCommand(string sql, params object[] parameters) => _dbContext.Database.ExecuteSqlCommand(sql, parameters);
+
+        public T Add(T entity)
         {
-            _dbSet.Add(entity);
+            return _dbSet.Add(entity).Entity;
         }
 
         public void Add(params T[] entities)
@@ -23,19 +27,27 @@ namespace MiniUow
             _dbSet.AddRange(entities);
         }
 
-
         public void Add(IEnumerable<T> entities)
         {
             _dbSet.AddRange(entities);
         }
 
+        public async Task AddAsync(T entity, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            await _dbSet.AddAsync(entity, cancellationToken);
+        }
+
+        public virtual Task AddAsync(params T[] entities) => _dbSet.AddRangeAsync(entities);
+
+        public virtual Task AddAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default(CancellationToken)) => _dbSet.AddRangeAsync(entities, cancellationToken);
+
 
         public void Delete(T entity)
         {
-            var existing = _dbSet.Find(entity);
-            if (existing != null) _dbSet.Remove(existing);
+            //var existing = _dbSet.Find(entity);
+            //if (existing != null)
+            _dbSet.Remove(entity);
         }
-
 
         public void Delete(object id)
         {
@@ -66,18 +78,6 @@ namespace MiniUow
         }
 
 
-        [Obsolete("Method is replaced by GetList")]
-        public IEnumerable<T> Get()
-        {
-            return _dbSet.AsEnumerable();
-        }
-
-        [Obsolete("Method is replaced by GetList")]
-        public IEnumerable<T> Get(Expression<Func<T, bool>> predicate)
-        {
-            return _dbSet.Where(predicate).AsEnumerable();
-        }
-
         public void Update(T entity)
         {
             _dbSet.Update(entity);
@@ -88,11 +88,11 @@ namespace MiniUow
             _dbSet.UpdateRange(entities);
         }
 
-
         public void Update(IEnumerable<T> entities)
         {
             _dbSet.UpdateRange(entities);
         }
+
 
         public void Dispose()
         {
