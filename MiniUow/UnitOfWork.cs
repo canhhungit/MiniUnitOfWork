@@ -27,11 +27,11 @@ namespace MiniUow
                 return (IRepository<TEntity>)_repositories[type];
             }
 
-            var typeRp = typeof(IRepository<TEntity>);
-            if (!_repositories.ContainsValue(typeRp))
-            {
-                _repositories[type] = new Repository<TEntity>(Context);
-            }
+            //var typeRp = typeof(IRepository<TEntity>);
+            //if (!_repositories.ContainsValue(typeRp))
+            //{
+            //    _repositories[type] = new Repository<TEntity>(Context);
+            //}
 
             return (IRepository<TEntity>)_repositories[type];
         }
