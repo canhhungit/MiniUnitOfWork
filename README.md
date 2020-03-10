@@ -41,9 +41,9 @@ Startup.cs
     public void ConfigureServices(IServiceCollection services)
     {
     	//using MiniUow.DependencyInjection;
-	//.AddUnitOfWork<SampleContext>();
+		//.AddUnitOfWork<SampleContext>();
         // Use the MiniUnitOfWork Dependency Injection to set up the Unit of Work
-	//Sample:
+		//Sample:
         services.AddEntityFrameworkNpgsql().AddDbContext<SampleContext>(opt =>
             opt.UseNpgsql(Configuration.GetConnectionString("SampleDatabase"))).AddUnitOfWork<SampleContext>();
     }
@@ -57,17 +57,21 @@ HomeController.cs
         _uow = unit;
     }
 
-    public void ActionMethod(string value)
+    public async Task ActionMethod(string value)
     {
-        //Demo
-        var data = _uow.GetRepository<TblUser>().GetList(
+        //Demo method
+		bool isExists = _uow.GetRepository<TblUser>().Exists(p => p.Username == value);
+		isExists = await _uow.GetRepository<TblUser>().ExistsAsync(p => p.Username == value);
+		var query = _uow.GetRepository<TblUser>().GetPagedList(index: 0, size: int.MaxValue);
+        var data = _uow.GetRepository<TblUser>().GetPagedList(
            predicate: p => p.Username.Contains(value) || p.Email.Contains(value) || p.Name.Contains(value),
            orderBy: p => p.OrderBy(p => p.Username),
            include: p => p.Include(x => x.TblUserGroup),
            index: 0,
            size: 20);
 
-        var result = _uow.GetRepository<TblUser>().GetAll();
+        var users = _uow.GetRepository<TblUser>().GetAll();
+        var userGroups = _uow.GetRepository<TblUserGroup>().GetAll();
 
         var user = _uow.GetRepository<TblUser>().Find(value);
         user = _uow.GetRepository<TblUser>().Single(p => p.Username == value);
