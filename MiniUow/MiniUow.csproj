@@ -15,7 +15,7 @@
     <PackageReleaseNotes>A library support repository, unit of work patterns</PackageReleaseNotes>
     <NeutralLanguage>en</NeutralLanguage>
     <Version>1.1.1</Version>
-    <PackageIcon>uow.ico</PackageIcon>
+    <PackageIcon>ico.jpeg</PackageIcon>
     <PackageIconUrl />
   </PropertyGroup>
 
@@ -34,11 +34,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\..\..\Downloads\uow.ico">
+    <None Include="..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
-    <None Include="..\LICENSE">
+    <None Include="ico.jpeg">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
