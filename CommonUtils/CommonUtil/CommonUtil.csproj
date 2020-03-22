@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Description>Simple utilities, data types, and extensibility frameworks, caching, and serialization.</Description>
+    <PackageLicenseExpression>None</PackageLicenseExpression>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <Copyright>Copyright ©2020</Copyright>
+    <PackageProjectUrl>https://github.com/canhhungit/MiniUnitOfWork</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/canhhungit/MiniUnitOfWork</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <NeutralLanguage>en</NeutralLanguage>
+    <PackageReleaseNotes>Simple utilities, data types, and extensibility frameworks, caching, and serialization.</PackageReleaseNotes>
+    <PackageIcon>icon.ico</PackageIcon>
+    <PackageIconUrl />
+    <PackageTags>CommonUtil,Common,Utils,CommonUtils</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Cache\CacheService.cs" />
+    <Compile Remove="ExcelNpoi.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="morelinq" Version="3.3.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="StackExchange.Redis" Version="2.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="icon.ico">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
