@@ -12,9 +12,9 @@
     <RepositoryUrl>https://github.com/canhhungit/MiniUnitOfWork</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>generic repository</PackageTags>
-    <PackageReleaseNotes>A library support repository, unit of work patterns</PackageReleaseNotes>
+    <PackageReleaseNotes>Update return T class when update</PackageReleaseNotes>
     <NeutralLanguage>en</NeutralLanguage>
-    <Version>1.1.1</Version>
+    <Version>1.3.0</Version>
     <PackageIcon>ico.jpeg</PackageIcon>
     <PackageIconUrl />
   </PropertyGroup>
@@ -34,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\LICENSE">
+    <None Include="..\..\..\..\Desktop\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
