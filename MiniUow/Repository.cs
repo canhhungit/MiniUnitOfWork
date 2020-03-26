@@ -32,9 +32,10 @@ namespace MiniUow
             _dbSet.AddRange(entities);
         }
 
-        public async Task AddAsync(T entity, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<T> AddAsync(T entity, CancellationToken cancellationToken = default(CancellationToken))
         {
-            await _dbSet.AddAsync(entity, cancellationToken);
+            var data = await _dbSet.AddAsync(entity, cancellationToken);
+            return data.Entity;
         }
 
         public virtual Task AddAsync(params T[] entities) => _dbSet.AddRangeAsync(entities);
@@ -78,9 +79,9 @@ namespace MiniUow
         }
 
 
-        public void Update(T entity)
+        public T Update(T entity)
         {
-            _dbSet.Update(entity);
+            return _dbSet.Update(entity).Entity;
         }
 
         public void Update(params T[] entities)

@@ -14,7 +14,7 @@ namespace MiniUow
         void Add(params T[] entities);
         void Add(IEnumerable<T> entities);
 
-        Task AddAsync(T entity, CancellationToken cancellationToken = default(CancellationToken));
+        Task<T> AddAsync(T entity, CancellationToken cancellationToken = default(CancellationToken));
         Task AddAsync(params T[] entities);
         Task AddAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default(CancellationToken));
 
@@ -24,7 +24,7 @@ namespace MiniUow
         void Delete(IEnumerable<T> entities);
 
 
-        void Update(T entity);
+        T Update(T entity);
         void Update(params T[] entities);
         void Update(IEnumerable<T> entities);
 
