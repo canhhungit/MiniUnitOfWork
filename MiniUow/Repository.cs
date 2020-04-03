@@ -1,8 +1,14 @@
+//-----------------------------------------------------------------------
+// <copyright>
+// Copyright (c) CanhHungIT. All rights reserved.
+// https://www.nuget.org/packages/MiniUow/
+// </copyright>
+//-----------------------------------------------------------------------
+
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;

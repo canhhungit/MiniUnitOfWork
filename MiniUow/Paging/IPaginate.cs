@@ -1,4 +1,11 @@
-﻿using System.Collections.Generic;
+﻿//-----------------------------------------------------------------------
+// <copyright>
+// Copyright (c) CanhHungIT. All rights reserved.
+// https://www.nuget.org/packages/MiniUow/
+// </copyright>
+//-----------------------------------------------------------------------
+
+using System.Collections.Generic;
 
 namespace MiniUow.Paging
 {

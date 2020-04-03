@@ -1,4 +1,11 @@
-﻿using System;
+﻿//-----------------------------------------------------------------------
+// <copyright>
+// Copyright (c) CanhHungIT. All rights reserved.
+// https://www.nuget.org/packages/MiniUow/
+// </copyright>
+//-----------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 

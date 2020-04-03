@@ -1,4 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿//-----------------------------------------------------------------------
+// <copyright>
+// Copyright (c) CanhHungIT. All rights reserved.
+// https://www.nuget.org/packages/MiniUow/
+// </copyright>
+//-----------------------------------------------------------------------
+
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading;

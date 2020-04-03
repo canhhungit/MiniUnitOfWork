@@ -4,19 +4,20 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageLicenseFile></PackageLicenseFile>
     <Authors>CanhHungIT</Authors>
-    <Description>A library support repository, unit of work patterns</Description>
+    <Description>Generic Repository Pattern and Unit Of Work for C# .Net Core</Description>
     <Copyright>Copyright ©2020 CanhHungIT</Copyright>
     <PackageProjectUrl>https://github.com/canhhungit/MiniUnitOfWork</PackageProjectUrl>
     <RepositoryUrl>https://github.com/canhhungit/MiniUnitOfWork</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>generic repository</PackageTags>
-    <PackageReleaseNotes>Update return T class when update</PackageReleaseNotes>
+    <PackageTags>GenericRepositoryPattern UnitOfWorkPattern .NetCore</PackageTags>
+    <PackageReleaseNotes>Update Readme and add function</PackageReleaseNotes>
     <NeutralLanguage>en</NeutralLanguage>
-    <Version>1.3.0</Version>
-    <PackageIcon>ico.jpeg</PackageIcon>
+    <Version>1.4.0</Version>
+    <PackageIcon>ico.jpg</PackageIcon>
     <PackageIconUrl />
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
@@ -34,11 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-    <None Include="ico.jpeg">
+    <None Include="ico.jpg">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>

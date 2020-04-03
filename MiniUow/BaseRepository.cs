@@ -1,3 +1,10 @@
+//-----------------------------------------------------------------------
+// <copyright>
+// Copyright (c) CanhHungIT. All rights reserved.
+// https://www.nuget.org/packages/MiniUow/
+// </copyright>
+//-----------------------------------------------------------------------
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using MiniUow.Paging;
@@ -20,7 +27,6 @@ namespace MiniUow
             _dbContext = context ?? throw new ArgumentException(nameof(context));
             _dbSet = _dbContext.Set<T>();
         }
-
 
         public bool Exists(Expression<Func<T, bool>> selector = null)
         {
@@ -46,7 +52,6 @@ namespace MiniUow
             }
         }
 
-
         public int Count(Expression<Func<T, bool>> predicate = null)
         {
             if (predicate == null)
@@ -71,9 +76,95 @@ namespace MiniUow
             }
         }
 
+        public virtual long LongCount(Expression<Func<T, bool>> predicate = null)
+        {
+            if (predicate == null)
+            {
+                return _dbSet.LongCount();
+            }
+            else
+            {
+                return _dbSet.LongCount(predicate);
+            }
+        }
+
+        public virtual async Task<long> LongCountAsync(Expression<Func<T, bool>> predicate = null)
+        {
+            if (predicate == null)
+            {
+                return await _dbSet.LongCountAsync();
+            }
+            else
+            {
+                return await _dbSet.LongCountAsync(predicate);
+            }
+        }
+
+        public virtual TEntity Max<TEntity>(Expression<Func<T, bool>> predicate = null, Expression<Func<T, TEntity>> selector = null)
+        {
+            if (predicate == null)
+                return _dbSet.Max(selector);
+            else
+                return _dbSet.Where(predicate).Max(selector);
+        }
+
+        public virtual async Task<TEntity> MaxAsync<TEntity>(Expression<Func<T, bool>> predicate = null, Expression<Func<T, TEntity>> selector = null)
+        {
+            if (predicate == null)
+                return await _dbSet.MaxAsync(selector);
+            else
+                return await _dbSet.Where(predicate).MaxAsync(selector);
+        }
+
+        public virtual TEntity Min<TEntity>(Expression<Func<T, bool>> predicate = null, Expression<Func<T, TEntity>> selector = null)
+        {
+            if (predicate == null)
+                return _dbSet.Min(selector);
+            else
+                return _dbSet.Where(predicate).Min(selector);
+        }
+
+        public virtual async Task<TEntity> MinAsync<TEntity>(Expression<Func<T, bool>> predicate = null, Expression<Func<T, TEntity>> selector = null)
+        {
+            if (predicate == null)
+                return await _dbSet.MinAsync(selector);
+            else
+                return await _dbSet.Where(predicate).MinAsync(selector);
+        }
+
+        public virtual decimal Average(Expression<Func<T, bool>> predicate = null, Expression<Func<T, decimal>> selector = null)
+        {
+            if (predicate == null)
+                return _dbSet.Average(selector);
+            else
+                return _dbSet.Where(predicate).Average(selector);
+        }
+
+        public virtual async Task<decimal> AverageAsync(Expression<Func<T, bool>> predicate = null, Expression<Func<T, decimal>> selector = null)
+        {
+            if (predicate == null)
+                return await _dbSet.AverageAsync(selector);
+            else
+                return await _dbSet.Where(predicate).AverageAsync(selector);
+        }
+
+        public virtual decimal Sum(Expression<Func<T, bool>> predicate = null, Expression<Func<T, decimal>> selector = null)
+        {
+            if (predicate == null)
+                return _dbSet.Sum(selector);
+            else
+                return _dbSet.Where(predicate).Sum(selector);
+        }
+
+        public virtual async Task<decimal> SumAsync(Expression<Func<T, bool>> predicate = null, Expression<Func<T, decimal>> selector = null)
+        {
+            if (predicate == null)
+                return await _dbSet.SumAsync(selector);
+            else
+                return await _dbSet.Where(predicate).SumAsync(selector);
+        }
 
         public virtual IQueryable<T> Query(string sql, params object[] parameters) => _dbSet.FromSql(sql, parameters);
-
 
         public T Find(params object[] keyValues) => _dbSet.Find(keyValues);
 
@@ -229,6 +320,13 @@ namespace MiniUow
             return await Task.Run(() => query.AsEnumerable());
         }
 
-
+        /// <summary>
+        /// Gets all entities. This method is not recommended
+        /// </summary>
+        /// <returns>The <see cref="IQueryable{T}"/>.</returns>
+        public IQueryable<T> GetAll()
+        {
+            return _dbSet;
+        }
     }
 }

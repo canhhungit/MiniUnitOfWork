@@ -1,11 +1,12 @@
-# Generic Repository Pattern for C# .net Core
 
-A simple lean & clean generic repository pattern for .net core  abstraction layer EntityFramework Core.
+# Generic Repository Pattern and Unit Of Work for C# .net Core
+
+A simple lean & clean generic repository pattern and unit of work for .net core  abstraction layer EntityFramework Core.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/kju8o0abk7yiep22/branch/master?svg=true)](https://ci.appveyor.com/project/canhhungit/miniunitofwork/branch/master)   
 [![NuGet Badge](https://buildstats.info/nuget/MiniUow)](https://www.nuget.org/packages/MiniUow/)
 
-MiniUnitOfWork supports the following platforms:
+MiniUow supports the following platforms:
 .NET 4.5.2+
 .NET Platform Standard 2.0
 .NET Core
@@ -29,7 +30,7 @@ Check out [Nuget package page](https://www.nuget.org/packages/MiniUow/) for more
 ## Documentation 
 Startup.cs
 ```csharp
-//Use the MiniUnitOfWork Dependency Injection to set up the Unit of Work.
+//Use the MiniUow Dependency Injection to set up the Unit of Work.
 //using MiniUow.DependencyInjection;
 public void ConfigureServices(IServiceCollection services)
 {
@@ -48,15 +49,19 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
+Controller or Services
 ```csharp
 private readonly IUnitOfWork _uow;
-public HomeController(IUnitOfWork unit)
+public ClassConstructor(IUnitOfWork unit)
 {
     _uow = unit;
 }
 
 public async Task ActionMethod(string value)
 {
+    //Exists, ExistsAsync, Count, CountAsync, Query, Find, FindAsync, Single, SingleAsync
+    //GetPagedList, GetPagedListAsync, GetAll, GetAllAsync
+
     //Demo method
 	bool isExists = _uow.GetRepository<TblUser>().Exists(p => p.Username == value);
 	isExists = await _uow.GetRepository<TblUser>().ExistsAsync(p => p.Username == value);
@@ -68,6 +73,7 @@ public async Task ActionMethod(string value)
        include: p => p.Include(x => x.TblUserGroup),
        index: 0,
        size: 20);
+    var items = _uow.GetRepository<TblUser>().GetPagedList(b => new { Username = b.Username, Name = b.Name });
 
     var users = _uow.GetRepository<TblUser>().GetAll();
     var userGroups = _uow.GetRepository<TblUserGroup>().GetAll();
@@ -78,6 +84,7 @@ public async Task ActionMethod(string value)
 
 public TblUser Create()
 {
+    //Add, AddAsync, Delete, Update
     var user =new TblUser();
     user.Password = CreatePasswordHash(password);
     user.CreateDate = DateTime.Now;
