@@ -267,7 +267,7 @@ namespace MiniUow
         /// <param name="disableTracking"></param>
         /// <returns></returns>
         /// <returns>An <see cref="IPagedList{T}"/> that contains elements that satisfy the condition specified by <paramref name="predicate"/>.</returns>
-        IEnumerable<T> GetAll(Expression<Func<T, bool>> predicate = null,
+        IQueryable<T> GetAll(Expression<Func<T, bool>> predicate = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
             bool disableTracking = true);
@@ -280,7 +280,7 @@ namespace MiniUow
         /// <param name="include"></param>
         /// <param name="disableTracking"></param>
         /// <returns></returns>
-        Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> predicate = null,
+        Task<IQueryable<T>> GetAllAsync(Expression<Func<T, bool>> predicate = null,
           Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
           Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
           bool disableTracking = true,

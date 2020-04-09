@@ -294,7 +294,7 @@ namespace MiniUow
 
         }
 
-        public IEnumerable<T> GetAll(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, bool disableTracking = true)
+        public IQueryable<T> GetAll(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, bool disableTracking = true)
         {
             IQueryable<T> query = _dbSet;
             if (disableTracking) query = query.AsNoTracking();
@@ -306,7 +306,7 @@ namespace MiniUow
             return orderBy != null ? orderBy(query) : query;
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, bool disableTracking = true, CancellationToken cancellationToken = default)
+        public async Task<IQueryable<T>> GetAllAsync(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, bool disableTracking = true, CancellationToken cancellationToken = default)
         {
             IQueryable<T> query = _dbSet;
             if (disableTracking) query = query.AsNoTracking();
@@ -316,8 +316,8 @@ namespace MiniUow
             if (predicate != null) query = query.Where(predicate);
 
             if (orderBy != null)
-                return await Task.Run(() => orderBy(query).AsEnumerable());
-            return await Task.Run(() => query.AsEnumerable());
+                return await Task.Run(() => orderBy(query));
+            return await Task.Run(() => query);
         }
 
         /// <summary>
