@@ -93,3 +93,10 @@ public TblUser Create()
     return data;
 }
 ```
+## Donate
+
+ MiniUow is developed and supported for free.
+
+If you would like to make a donation to keep the developers stocked with coffee and pizza's would be greatly appreciated.
+
+[![Donate via PayPal]](https://www.paypal.me/canhhungit/)
