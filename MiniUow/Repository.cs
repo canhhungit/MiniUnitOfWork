@@ -21,24 +21,24 @@ namespace MiniUow
         {
         }
 
-        public int ExecuteSqlCommand(string sql, params object[] parameters) => _dbContext.Database.ExecuteSqlCommand(sql, parameters);
+        public virtual int ExecuteSqlCommand(string sql, params object[] parameters) => _dbContext.Database.ExecuteSqlCommand(sql, parameters);
 
-        public T Add(T entity)
+        public virtual T Add(T entity)
         {
             return _dbSet.Add(entity).Entity;
         }
 
-        public void Add(params T[] entities)
+        public virtual void Add(params T[] entities)
         {
             _dbSet.AddRange(entities);
         }
 
-        public void Add(IEnumerable<T> entities)
+        public virtual void Add(IEnumerable<T> entities)
         {
             _dbSet.AddRange(entities);
         }
 
-        public async Task<T> AddAsync(T entity, CancellationToken cancellationToken = default(CancellationToken))
+        public virtual async Task<T> AddAsync(T entity, CancellationToken cancellationToken = default(CancellationToken))
         {
             var data = await _dbSet.AddAsync(entity, cancellationToken);
             return data.Entity;
@@ -49,14 +49,14 @@ namespace MiniUow
         public virtual Task AddAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default(CancellationToken)) => _dbSet.AddRangeAsync(entities, cancellationToken);
 
 
-        public void Delete(T entity)
+        public virtual void Delete(T entity)
         {
             //var existing = _dbSet.Find(entity);
             //if (existing != null)
             _dbSet.Remove(entity);
         }
 
-        public void Delete(object id)
+        public virtual void Delete(object id)
         {
             var typeInfo = typeof(T).GetTypeInfo();
             var key = _dbContext.Model.FindEntityType(typeInfo).FindPrimaryKey().Properties.FirstOrDefault();
@@ -74,28 +74,28 @@ namespace MiniUow
             }
         }
 
-        public void Delete(params T[] entities)
+        public virtual void Delete(params T[] entities)
         {
             _dbSet.RemoveRange(entities);
         }
 
-        public void Delete(IEnumerable<T> entities)
+        public virtual void Delete(IEnumerable<T> entities)
         {
             _dbSet.RemoveRange(entities);
         }
 
 
-        public T Update(T entity)
+        public virtual T Update(T entity)
         {
             return _dbSet.Update(entity).Entity;
         }
 
-        public void Update(params T[] entities)
+        public virtual void Update(params T[] entities)
         {
             _dbSet.UpdateRange(entities);
         }
 
-        public void Update(IEnumerable<T> entities)
+        public virtual void Update(IEnumerable<T> entities)
         {
             _dbSet.UpdateRange(entities);
         }

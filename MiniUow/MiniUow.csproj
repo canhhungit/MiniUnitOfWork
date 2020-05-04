@@ -12,9 +12,9 @@
     <RepositoryUrl>https://github.com/canhhungit/MiniUnitOfWork</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>GenericRepositoryPattern UnitOfWorkPattern .NetCore</PackageTags>
-    <PackageReleaseNotes>Update Readme and add function</PackageReleaseNotes>
+    <PackageReleaseNotes>Update function</PackageReleaseNotes>
     <NeutralLanguage>en</NeutralLanguage>
-    <Version>1.4.0</Version>
+    <Version>1.5.0</Version>
     <PackageIcon>ico.jpg</PackageIcon>
     <PackageIconUrl />
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

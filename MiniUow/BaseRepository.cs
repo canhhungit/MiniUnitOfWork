@@ -28,7 +28,7 @@ namespace MiniUow
             _dbSet = _dbContext.Set<T>();
         }
 
-        public bool Exists(Expression<Func<T, bool>> selector = null)
+        public virtual bool Exists(Expression<Func<T, bool>> selector = null)
         {
             if (selector == null)
             {
@@ -40,7 +40,7 @@ namespace MiniUow
             }
         }
 
-        public async Task<bool> ExistsAsync(Expression<Func<T, bool>> selector = null)
+        public virtual async Task<bool> ExistsAsync(Expression<Func<T, bool>> selector = null)
         {
             if (selector == null)
             {
@@ -52,7 +52,7 @@ namespace MiniUow
             }
         }
 
-        public int Count(Expression<Func<T, bool>> predicate = null)
+        public virtual int Count(Expression<Func<T, bool>> predicate = null)
         {
             if (predicate == null)
             {
@@ -64,7 +64,7 @@ namespace MiniUow
             }
         }
 
-        public async Task<int> CountAsync(Expression<Func<T, bool>> predicate = null)
+        public virtual async Task<int> CountAsync(Expression<Func<T, bool>> predicate = null)
         {
             if (predicate == null)
             {
@@ -166,11 +166,11 @@ namespace MiniUow
 
         public virtual IQueryable<T> Query(string sql, params object[] parameters) => _dbSet.FromSql(sql, parameters);
 
-        public T Find(params object[] keyValues) => _dbSet.Find(keyValues);
+        public virtual T Find(params object[] keyValues) => _dbSet.Find(keyValues);
 
-        public async Task<T> FindAsync(params object[] keyValues) => await _dbSet.FindAsync(keyValues);
+        public virtual async Task<T> FindAsync(params object[] keyValues) => await _dbSet.FindAsync(keyValues);
 
-        public T Single(Expression<Func<T, bool>> predicate = null,
+        public virtual T Single(Expression<Func<T, bool>> predicate = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
             bool disableTracking = true)
@@ -187,7 +187,7 @@ namespace MiniUow
             return query.FirstOrDefault();
         }
 
-        public async Task<T> SingleAsync(Expression<Func<T, bool>> predicate = null,
+        public virtual async Task<T> SingleAsync(Expression<Func<T, bool>> predicate = null,
            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, bool disableTracking = true)
         {
@@ -203,7 +203,7 @@ namespace MiniUow
             return await query.FirstOrDefaultAsync();
         }
 
-        public IPaginate<T> GetPagedList(Expression<Func<T, bool>> predicate = null,
+        public virtual IPaginate<T> GetPagedList(Expression<Func<T, bool>> predicate = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, int index = 0,
             int size = 20, bool disableTracking = true)
@@ -218,7 +218,7 @@ namespace MiniUow
             return orderBy != null ? orderBy(query).ToPaginate(index, size) : query.ToPaginate(index, size);
         }
 
-        public async Task<IPaginate<T>> GetPagedListAsync(Expression<Func<T, bool>> predicate = null,
+        public virtual async Task<IPaginate<T>> GetPagedListAsync(Expression<Func<T, bool>> predicate = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
             int index = 0,
@@ -238,7 +238,7 @@ namespace MiniUow
             return await query.ToPaginateAsync(index, size, 0, cancellationToken);
         }
 
-        public IPaginate<TResult> GetPagedList<TResult>(Expression<Func<T, TResult>> selector,
+        public virtual IPaginate<TResult> GetPagedList<TResult>(Expression<Func<T, TResult>> selector,
             Expression<Func<T, bool>> predicate = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
@@ -258,7 +258,7 @@ namespace MiniUow
                 : query.Select(selector).ToPaginate(index, size);
         }
 
-        public async Task<IPaginate<TResult>> GetPagedListAsync<TResult>(Expression<Func<T, TResult>> selector, Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, int pageIndex = 0, int pageSize = 20, bool disableTracking = true, CancellationToken cancellationToken = default, bool ignoreQueryFilters = false)
+        public virtual async Task<IPaginate<TResult>> GetPagedListAsync<TResult>(Expression<Func<T, TResult>> selector, Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, int pageIndex = 0, int pageSize = 20, bool disableTracking = true, CancellationToken cancellationToken = default, bool ignoreQueryFilters = false)
         {
 
             IQueryable<T> query = _dbSet;
@@ -294,7 +294,7 @@ namespace MiniUow
 
         }
 
-        public IQueryable<T> GetAll(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, bool disableTracking = true)
+        public virtual IQueryable<T> GetAll(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, bool disableTracking = true)
         {
             IQueryable<T> query = _dbSet;
             if (disableTracking) query = query.AsNoTracking();
@@ -306,7 +306,7 @@ namespace MiniUow
             return orderBy != null ? orderBy(query) : query;
         }
 
-        public async Task<IQueryable<T>> GetAllAsync(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, bool disableTracking = true, CancellationToken cancellationToken = default)
+        public virtual async Task<IQueryable<T>> GetAllAsync(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, bool disableTracking = true, CancellationToken cancellationToken = default)
         {
             IQueryable<T> query = _dbSet;
             if (disableTracking) query = query.AsNoTracking();
@@ -324,9 +324,19 @@ namespace MiniUow
         /// Gets all entities. This method is not recommended
         /// </summary>
         /// <returns>The <see cref="IQueryable{T}"/>.</returns>
-        public IQueryable<T> GetAll()
+        public virtual IQueryable<T> GetAll()
         {
             return _dbSet;
+        }
+
+        public virtual T FirstOrDefault(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, bool disableTracking = true)
+        {
+            return Single(predicate, orderBy, include, disableTracking);
+        }
+
+        public virtual async Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, bool disableTracking = true)
+        {
+            return await SingleAsync(predicate, orderBy, include, disableTracking);
         }
     }
 }
