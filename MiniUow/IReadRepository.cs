@@ -147,6 +147,14 @@ namespace MiniUow
         Task<T> FindAsync(params object[] keyValues);
 
         /// <summary>
+        /// Finds an entity with the given primary key values. If found, is attached to the context and returned. If no entity is found, then null is returned.
+        /// </summary>
+        /// <param name="keyValues">The values of the primary key for the entity to be found.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
+        /// <returns>A <see cref="Task{T}"/> that represents the asynchronous find operation. The task result contains the found entity or null.</returns>
+        Task<T> FindAsync(object[] keyValues, CancellationToken cancellationToken);
+
+        /// <summary>
         /// Gets the first or default entity based on a predicate, orderby delegate and include delegate. This method default no-tracking query.
         /// </summary>
         /// <param name="predicate"></param>
@@ -157,7 +165,7 @@ namespace MiniUow
         T Single(Expression<Func<T, bool>> predicate = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
-            bool disableTracking = true);
+            bool disableTracking = true, bool ignoreQueryFilters = false);
 
         /// <summary>
         /// Gets the first or default entity based on a predicate, orderby delegate and include delegate. This method default no-tracking query.
@@ -170,7 +178,25 @@ namespace MiniUow
         Task<T> SingleAsync(Expression<Func<T, bool>> predicate = null,
            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
-           bool disableTracking = true);
+           bool disableTracking = true, bool ignoreQueryFilters = false);
+
+        /// <summary>
+        /// Gets the first or default entity based on a predicate, orderby delegate and include delegate. This method defaults to a read-only, no-tracking query.
+        /// </summary>
+        /// <param name="selector">The selector for projection.</param>
+        /// <param name="predicate">A function to test each element for a condition.</param>
+        /// <param name="orderBy">A function to order elements.</param>
+        /// <param name="include">A function to include navigation properties</param>
+        /// <param name="disableTracking"><c>true</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>true</c>.</param>
+        /// <param name="ignoreQueryFilters">Ignore query filters</param>
+        /// <returns>An <see cref="IPagedList{T}"/> that contains elements that satisfy the condition specified by <paramref name="predicate"/>.</returns>
+        /// <remarks>This method defaults to a read-only, no-tracking query.</remarks>
+        TResult FirstOrDefault<TResult>(Expression<Func<T, TResult>> selector,
+                                           Expression<Func<T, bool>> predicate = null,
+                                           Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+                                           Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
+                                           bool disableTracking = true,
+                                           bool ignoreQueryFilters = false);
 
         /// <summary>
         /// Gets the first or default entity based on a predicate, orderby delegate and include delegate. This method default no-tracking query.
@@ -183,7 +209,7 @@ namespace MiniUow
         T FirstOrDefault(Expression<Func<T, bool>> predicate = null,
               Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
               Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
-              bool disableTracking = true);
+              bool disableTracking = true, bool ignoreQueryFilters = false);
 
         /// <summary>
         /// Gets the first or default entity based on a predicate, orderby delegate and include delegate. This method default no-tracking query.
@@ -196,7 +222,25 @@ namespace MiniUow
         Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate = null,
               Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
               Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
-              bool disableTracking = true);
+              bool disableTracking = true, bool ignoreQueryFilters = false);
+
+        /// <summary>
+        /// Gets the first or default entity based on a predicate, orderby delegate and include delegate. This method defaults to a read-only, no-tracking query.
+        /// </summary>
+        /// <param name="selector">The selector for projection.</param>
+        /// <param name="predicate">A function to test each element for a condition.</param>
+        /// <param name="orderBy">A function to order elements.</param>
+        /// <param name="include">A function to include navigation properties</param>
+        /// <param name="disableTracking"><c>true</c> to disable changing tracking; otherwise, <c>false</c>. Default to <c>true</c>.</param>
+        /// <param name="ignoreQueryFilters">Ignore query filters</param>
+        /// <returns>An <see cref="IPagedList{T}"/> that contains elements that satisfy the condition specified by <paramref name="predicate"/>.</returns>
+        /// <remarks>Ex: This method defaults to a read-only, no-tracking query.</remarks>
+        Task<TResult> FirstOrDefaultAsync<TResult>(Expression<Func<T, TResult>> selector,
+            Expression<Func<T, bool>> predicate = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
+            bool disableTracking = true,
+            bool ignoreQueryFilters = false);
 
         /// <summary>
         /// Gets the <see cref="IPagedList{T}"/> based on a predicate, orderby delegate and page information.
@@ -215,7 +259,8 @@ namespace MiniUow
             int index = 0,
             int size = 20,
             bool disableTracking = true,
-            CancellationToken cancellationToken = default(CancellationToken));
+            CancellationToken cancellationToken = default(CancellationToken),
+            bool ignoreQueryFilters = false);
 
         /// <summary>
         /// Gets the <see cref="IPagedList{T}"/> based on a predicate, orderby delegate and page information.
@@ -232,7 +277,8 @@ namespace MiniUow
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
             int index = 0,
             int size = 20,
-            bool disableTracking = true);
+            bool disableTracking = true,
+            bool ignoreQueryFilters = false);
 
         /// <summary>
         /// Gets the <see cref="IPagedList{T}"/> based on a predicate, orderby delegate and page information.
@@ -252,7 +298,8 @@ namespace MiniUow
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
             int index = 0,
             int size = 20,
-            bool disableTracking = true) where TResult : class;
+            bool disableTracking = true,
+            bool ignoreQueryFilters = false) where TResult : class;
 
         /// <summary>
         /// Gets the <see cref="IPagedList{T}"/> based on a predicate, orderby delegate and page information.
@@ -296,7 +343,13 @@ namespace MiniUow
         IQueryable<T> GetAll(Expression<Func<T, bool>> predicate = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
-            bool disableTracking = true);
+            bool disableTracking = true, bool ignoreQueryFilters = false);
+
+        /// <summary>
+        /// Gets all entities. This method is not recommended
+        /// </summary>
+        /// <returns>The <see cref="IQueryable{T}"/>.</returns>
+        Task<IList<T>> GetAllAsync();
 
         /// <summary>
         /// Gets all entities. This method is not recommended
@@ -309,7 +362,6 @@ namespace MiniUow
         Task<IQueryable<T>> GetAllAsync(Expression<Func<T, bool>> predicate = null,
           Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
           Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
-          bool disableTracking = true,
-          CancellationToken cancellationToken = default(CancellationToken));
+          bool disableTracking = true, bool ignoreQueryFilters = false);
     }
 }

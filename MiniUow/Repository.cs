@@ -23,29 +23,42 @@ namespace MiniUow
 
         public virtual int ExecuteSqlCommand(string sql, params object[] parameters) => _dbContext.Database.ExecuteSqlCommand(sql, parameters);
 
+        //public IQueryable<T> FromSql<T>(string sql, params object[] parameters) where T : class => _dbContext.Set<T>().FromSqlRaw(sql, parameters);
+
+        /// <summary>
+        /// Adds a new entity synchronously.
+        /// </summary>
+        /// <param name="entity">The entity to Add.</param>
         public virtual T Add(T entity)
         {
             return _dbSet.Add(entity).Entity;
         }
 
-        public virtual void Add(params T[] entities)
-        {
-            _dbSet.AddRange(entities);
-        }
+        /// <summary>
+        /// Adds a range of entities synchronously.
+        /// </summary>
+        /// <param name="entities">The entities to Add.</param>
+        public virtual void Add(params T[] entities) => _dbSet.AddRange(entities);
 
-        public virtual void Add(IEnumerable<T> entities)
-        {
-            _dbSet.AddRange(entities);
-        }
+        /// <summary>
+        /// Adds a range of entities synchronously.
+        /// </summary>
+        /// <param name="entities">The entities to Add.</param>
+        public virtual void Add(IEnumerable<T> entities) => _dbSet.AddRange(entities);
 
-        public virtual async Task<T> AddAsync(T entity, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            var data = await _dbSet.AddAsync(entity, cancellationToken);
-            return data.Entity;
-        }
-
+        /// <summary>
+        /// Adds a range of entities asynchronously.
+        /// </summary>
+        /// <param name="entities">The entities to Add.</param>
+        /// <returns>A <see cref="Task" /> that represents the asynchronous Add operation.</returns>
         public virtual Task AddAsync(params T[] entities) => _dbSet.AddRangeAsync(entities);
 
+        /// <summary>
+        /// Adds a range of entities asynchronously.
+        /// </summary>
+        /// <param name="entities">The entities to Add.</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
+        /// <returns>A <see cref="Task"/> that represents the asynchronous Add operation.</returns>
         public virtual Task AddAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default(CancellationToken)) => _dbSet.AddRangeAsync(entities, cancellationToken);
 
 

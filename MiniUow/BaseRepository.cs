@@ -170,10 +170,13 @@ namespace MiniUow
 
         public virtual async Task<T> FindAsync(params object[] keyValues) => await _dbSet.FindAsync(keyValues);
 
+        public virtual Task<T> FindAsync(object[] keyValues, CancellationToken cancellationToken) => _dbSet.FindAsync(keyValues, cancellationToken);
+
+
         public virtual T Single(Expression<Func<T, bool>> predicate = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
-            bool disableTracking = true)
+            bool disableTracking = true, bool ignoreQueryFilters = false)
         {
             IQueryable<T> query = _dbSet;
             if (disableTracking) query = query.AsNoTracking();
@@ -189,7 +192,8 @@ namespace MiniUow
 
         public virtual async Task<T> SingleAsync(Expression<Func<T, bool>> predicate = null,
            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
-           Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, bool disableTracking = true)
+           Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, bool disableTracking = true,
+            bool ignoreQueryFilters = false)
         {
             IQueryable<T> query = _dbSet;
             if (disableTracking) query = query.AsNoTracking();
@@ -197,7 +201,10 @@ namespace MiniUow
             if (include != null) query = include(query);
 
             if (predicate != null) query = query.Where(predicate);
-
+            if (ignoreQueryFilters)
+            {
+                query = query.IgnoreQueryFilters();
+            }
             if (orderBy != null)
                 return await orderBy(query).FirstOrDefaultAsync();
             return await query.FirstOrDefaultAsync();
@@ -206,7 +213,7 @@ namespace MiniUow
         public virtual IPaginate<T> GetPagedList(Expression<Func<T, bool>> predicate = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, int index = 0,
-            int size = 20, bool disableTracking = true)
+            int size = 20, bool disableTracking = true, bool ignoreQueryFilters = false)
         {
             IQueryable<T> query = _dbSet;
             if (disableTracking) query = query.AsNoTracking();
@@ -214,6 +221,11 @@ namespace MiniUow
             if (include != null) query = include(query);
 
             if (predicate != null) query = query.Where(predicate);
+
+            if (ignoreQueryFilters)
+            {
+                query = query.IgnoreQueryFilters();
+            }
 
             return orderBy != null ? orderBy(query).ToPaginate(index, size) : query.ToPaginate(index, size);
         }
@@ -224,7 +236,8 @@ namespace MiniUow
             int index = 0,
             int size = 20,
             bool disableTracking = true,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default(CancellationToken),
+            bool ignoreQueryFilters = false)
         {
             IQueryable<T> query = _dbSet;
             if (disableTracking) query = query.AsNoTracking();
@@ -232,6 +245,11 @@ namespace MiniUow
             if (include != null) query = include(query);
 
             if (predicate != null) query = query.Where(predicate);
+
+            if (ignoreQueryFilters)
+            {
+                query = query.IgnoreQueryFilters();
+            }
 
             if (orderBy != null)
                 return await orderBy(query).ToPaginateAsync(index, size, 0, cancellationToken);
@@ -244,7 +262,8 @@ namespace MiniUow
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
             int index = 0,
             int size = 20,
-            bool disableTracking = true) where TResult : class
+            bool disableTracking = true,
+            bool ignoreQueryFilters = false) where TResult : class
         {
             IQueryable<T> query = _dbSet;
             if (disableTracking) query = query.AsNoTracking();
@@ -253,12 +272,25 @@ namespace MiniUow
 
             if (predicate != null) query = query.Where(predicate);
 
+            if (ignoreQueryFilters)
+            {
+                query = query.IgnoreQueryFilters();
+            }
+
             return orderBy != null
                 ? orderBy(query).Select(selector).ToPaginate(index, size)
                 : query.Select(selector).ToPaginate(index, size);
         }
 
-        public virtual async Task<IPaginate<TResult>> GetPagedListAsync<TResult>(Expression<Func<T, TResult>> selector, Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, int pageIndex = 0, int pageSize = 20, bool disableTracking = true, CancellationToken cancellationToken = default, bool ignoreQueryFilters = false)
+        public virtual async Task<IPaginate<TResult>> GetPagedListAsync<TResult>(Expression<Func<T, TResult>> selector,
+            Expression<Func<T, bool>> predicate = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
+            int pageIndex = 0,
+            int pageSize = 20,
+            bool disableTracking = true,
+            CancellationToken cancellationToken = default,
+            bool ignoreQueryFilters = false)
         {
 
             IQueryable<T> query = _dbSet;
@@ -294,7 +326,11 @@ namespace MiniUow
 
         }
 
-        public virtual IQueryable<T> GetAll(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, bool disableTracking = true)
+        public virtual IQueryable<T> GetAll(Expression<Func<T, bool>> predicate = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
+            bool disableTracking = true,
+            bool ignoreQueryFilters = false)
         {
             IQueryable<T> query = _dbSet;
             if (disableTracking) query = query.AsNoTracking();
@@ -302,11 +338,16 @@ namespace MiniUow
             if (include != null) query = include(query);
 
             if (predicate != null) query = query.Where(predicate);
+            if (ignoreQueryFilters) query = query.IgnoreQueryFilters();
 
             return orderBy != null ? orderBy(query) : query;
         }
 
-        public virtual async Task<IQueryable<T>> GetAllAsync(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, bool disableTracking = true, CancellationToken cancellationToken = default)
+        public virtual async Task<IQueryable<T>> GetAllAsync(Expression<Func<T, bool>> predicate = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
+            bool disableTracking = true,
+            bool ignoreQueryFilters = false)
         {
             IQueryable<T> query = _dbSet;
             if (disableTracking) query = query.AsNoTracking();
@@ -314,29 +355,121 @@ namespace MiniUow
             if (include != null) query = include(query);
 
             if (predicate != null) query = query.Where(predicate);
+
+            if (ignoreQueryFilters)
+            {
+                query = query.IgnoreQueryFilters();
+            }
 
             if (orderBy != null)
                 return await Task.Run(() => orderBy(query));
             return await Task.Run(() => query);
         }
 
-        /// <summary>
-        /// Gets all entities. This method is not recommended
-        /// </summary>
-        /// <returns>The <see cref="IQueryable{T}"/>.</returns>
         public virtual IQueryable<T> GetAll()
         {
             return _dbSet;
         }
 
-        public virtual T FirstOrDefault(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, bool disableTracking = true)
+        public async Task<IList<T>> GetAllAsync()
         {
-            return Single(predicate, orderBy, include, disableTracking);
+            return await _dbSet.ToListAsync();
         }
 
-        public virtual async Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null, bool disableTracking = true)
+        public virtual T FirstOrDefault(Expression<Func<T, bool>> predicate = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
+            bool disableTracking = true,
+            bool ignoreQueryFilters = false)
         {
-            return await SingleAsync(predicate, orderBy, include, disableTracking);
+            return Single(predicate, orderBy, include, disableTracking, ignoreQueryFilters);
+        }
+
+        public virtual TResult FirstOrDefault<TResult>(Expression<Func<T, TResult>> selector,
+                                                 Expression<Func<T, bool>> predicate = null,
+                                                 Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+                                                 Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
+                                                 bool disableTracking = true,
+                                                 bool ignoreQueryFilters = false)
+        {
+            IQueryable<T> query = _dbSet;
+
+            if (disableTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            if (include != null)
+            {
+                query = include(query);
+            }
+
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
+
+            if (ignoreQueryFilters)
+            {
+                query = query.IgnoreQueryFilters();
+            }
+
+            if (orderBy != null)
+            {
+                return orderBy(query).Select(selector).FirstOrDefault();
+            }
+            else
+            {
+                return query.Select(selector).FirstOrDefault();
+            }
+        }
+
+        public virtual async Task<T> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
+            bool disableTracking = true,
+            bool ignoreQueryFilters = false)
+        {
+            return await SingleAsync(predicate, orderBy, include, disableTracking, ignoreQueryFilters);
+        }
+
+        public virtual async Task<TResult> FirstOrDefaultAsync<TResult>(Expression<Func<T, TResult>> selector,
+                                              Expression<Func<T, bool>> predicate = null,
+                                              Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+                                              Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
+                                              bool disableTracking = true,
+                                              bool ignoreQueryFilters = false)
+        {
+            IQueryable<T> query = _dbSet;
+
+            if (disableTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            if (include != null)
+            {
+                query = include(query);
+            }
+
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
+
+            if (ignoreQueryFilters)
+            {
+                query = query.IgnoreQueryFilters();
+            }
+
+            if (orderBy != null)
+            {
+                return await orderBy(query).Select(selector).FirstOrDefaultAsync();
+            }
+            else
+            {
+                return await query.Select(selector).FirstOrDefaultAsync();
+            }
         }
     }
 }
