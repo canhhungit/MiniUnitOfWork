@@ -18,7 +18,9 @@ namespace MiniUow.Paging
             var enumerable = source as T[] ?? source.ToArray();
 
             if (from > index)
+            {
                 throw new ArgumentException($"indexFrom: {from} > pageIndex: {index}, must indexFrom <= pageIndex");
+            }
 
             if (source is IQueryable<T> querable)
             {
@@ -66,7 +68,10 @@ namespace MiniUow.Paging
         {
             var enumerable = source as TSource[] ?? source.ToArray();
 
-            if (from > index) throw new ArgumentException($"From: {from} > Index: {index}, must From <= Index");
+            if (from > index)
+            {
+                throw new ArgumentException($"From: {from} > Index: {index}, must From <= Index");
+            }
 
             if (source is IQueryable<TSource> queryable)
             {

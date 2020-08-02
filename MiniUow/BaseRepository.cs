@@ -103,65 +103,97 @@ namespace MiniUow
         public virtual TEntity Max<TEntity>(Expression<Func<T, bool>> predicate = null, Expression<Func<T, TEntity>> selector = null)
         {
             if (predicate == null)
+            {
                 return _dbSet.Max(selector);
+            }
             else
+            {
                 return _dbSet.Where(predicate).Max(selector);
+            }
         }
 
         public virtual async Task<TEntity> MaxAsync<TEntity>(Expression<Func<T, bool>> predicate = null, Expression<Func<T, TEntity>> selector = null)
         {
             if (predicate == null)
+            {
                 return await _dbSet.MaxAsync(selector);
+            }
             else
+            {
                 return await _dbSet.Where(predicate).MaxAsync(selector);
+            }
         }
 
         public virtual TEntity Min<TEntity>(Expression<Func<T, bool>> predicate = null, Expression<Func<T, TEntity>> selector = null)
         {
             if (predicate == null)
+            {
                 return _dbSet.Min(selector);
+            }
             else
+            {
                 return _dbSet.Where(predicate).Min(selector);
+            }
         }
 
         public virtual async Task<TEntity> MinAsync<TEntity>(Expression<Func<T, bool>> predicate = null, Expression<Func<T, TEntity>> selector = null)
         {
             if (predicate == null)
+            {
                 return await _dbSet.MinAsync(selector);
+            }
             else
+            {
                 return await _dbSet.Where(predicate).MinAsync(selector);
+            }
         }
 
         public virtual decimal Average(Expression<Func<T, bool>> predicate = null, Expression<Func<T, decimal>> selector = null)
         {
             if (predicate == null)
+            {
                 return _dbSet.Average(selector);
+            }
             else
+            {
                 return _dbSet.Where(predicate).Average(selector);
+            }
         }
 
         public virtual async Task<decimal> AverageAsync(Expression<Func<T, bool>> predicate = null, Expression<Func<T, decimal>> selector = null)
         {
             if (predicate == null)
+            {
                 return await _dbSet.AverageAsync(selector);
+            }
             else
+            {
                 return await _dbSet.Where(predicate).AverageAsync(selector);
+            }
         }
 
         public virtual decimal Sum(Expression<Func<T, bool>> predicate = null, Expression<Func<T, decimal>> selector = null)
         {
             if (predicate == null)
+            {
                 return _dbSet.Sum(selector);
+            }
             else
+            {
                 return _dbSet.Where(predicate).Sum(selector);
+            }
         }
 
         public virtual async Task<decimal> SumAsync(Expression<Func<T, bool>> predicate = null, Expression<Func<T, decimal>> selector = null)
         {
             if (predicate == null)
+            {
                 return await _dbSet.SumAsync(selector);
+            }
             else
+            {
                 return await _dbSet.Where(predicate).SumAsync(selector);
+            }
         }
 
         public virtual IQueryable<T> Query(string sql, params object[] parameters) => _dbSet.FromSql(sql, parameters);
@@ -179,14 +211,26 @@ namespace MiniUow
             bool disableTracking = true, bool ignoreQueryFilters = false)
         {
             IQueryable<T> query = _dbSet;
-            if (disableTracking) query = query.AsNoTracking();
+            if (disableTracking)
+            {
+                query = query.AsNoTracking();
+            }
 
-            if (include != null) query = include(query);
+            if (include != null)
+            {
+                query = include(query);
+            }
 
-            if (predicate != null) query = query.Where(predicate);
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
 
             if (orderBy != null)
+            {
                 return orderBy(query).FirstOrDefault();
+            }
+
             return query.FirstOrDefault();
         }
 
@@ -196,17 +240,30 @@ namespace MiniUow
             bool ignoreQueryFilters = false)
         {
             IQueryable<T> query = _dbSet;
-            if (disableTracking) query = query.AsNoTracking();
+            if (disableTracking)
+            {
+                query = query.AsNoTracking();
+            }
 
-            if (include != null) query = include(query);
+            if (include != null)
+            {
+                query = include(query);
+            }
 
-            if (predicate != null) query = query.Where(predicate);
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
+
             if (ignoreQueryFilters)
             {
                 query = query.IgnoreQueryFilters();
             }
             if (orderBy != null)
+            {
                 return await orderBy(query).FirstOrDefaultAsync();
+            }
+
             return await query.FirstOrDefaultAsync();
         }
 
@@ -216,11 +273,20 @@ namespace MiniUow
             int size = 20, bool disableTracking = true, bool ignoreQueryFilters = false)
         {
             IQueryable<T> query = _dbSet;
-            if (disableTracking) query = query.AsNoTracking();
+            if (disableTracking)
+            {
+                query = query.AsNoTracking();
+            }
 
-            if (include != null) query = include(query);
+            if (include != null)
+            {
+                query = include(query);
+            }
 
-            if (predicate != null) query = query.Where(predicate);
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
 
             if (ignoreQueryFilters)
             {
@@ -240,11 +306,20 @@ namespace MiniUow
             bool ignoreQueryFilters = false)
         {
             IQueryable<T> query = _dbSet;
-            if (disableTracking) query = query.AsNoTracking();
+            if (disableTracking)
+            {
+                query = query.AsNoTracking();
+            }
 
-            if (include != null) query = include(query);
+            if (include != null)
+            {
+                query = include(query);
+            }
 
-            if (predicate != null) query = query.Where(predicate);
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
 
             if (ignoreQueryFilters)
             {
@@ -252,7 +327,10 @@ namespace MiniUow
             }
 
             if (orderBy != null)
+            {
                 return await orderBy(query).ToPaginateAsync(index, size, 0, cancellationToken);
+            }
+
             return await query.ToPaginateAsync(index, size, 0, cancellationToken);
         }
 
@@ -266,11 +344,20 @@ namespace MiniUow
             bool ignoreQueryFilters = false) where TResult : class
         {
             IQueryable<T> query = _dbSet;
-            if (disableTracking) query = query.AsNoTracking();
+            if (disableTracking)
+            {
+                query = query.AsNoTracking();
+            }
 
-            if (include != null) query = include(query);
+            if (include != null)
+            {
+                query = include(query);
+            }
 
-            if (predicate != null) query = query.Where(predicate);
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
 
             if (ignoreQueryFilters)
             {
@@ -333,12 +420,25 @@ namespace MiniUow
             bool ignoreQueryFilters = false)
         {
             IQueryable<T> query = _dbSet;
-            if (disableTracking) query = query.AsNoTracking();
+            if (disableTracking)
+            {
+                query = query.AsNoTracking();
+            }
 
-            if (include != null) query = include(query);
+            if (include != null)
+            {
+                query = include(query);
+            }
 
-            if (predicate != null) query = query.Where(predicate);
-            if (ignoreQueryFilters) query = query.IgnoreQueryFilters();
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
+
+            if (ignoreQueryFilters)
+            {
+                query = query.IgnoreQueryFilters();
+            }
 
             return orderBy != null ? orderBy(query) : query;
         }
@@ -350,11 +450,20 @@ namespace MiniUow
             bool ignoreQueryFilters = false)
         {
             IQueryable<T> query = _dbSet;
-            if (disableTracking) query = query.AsNoTracking();
+            if (disableTracking)
+            {
+                query = query.AsNoTracking();
+            }
 
-            if (include != null) query = include(query);
+            if (include != null)
+            {
+                query = include(query);
+            }
 
-            if (predicate != null) query = query.Where(predicate);
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
 
             if (ignoreQueryFilters)
             {
@@ -362,7 +471,10 @@ namespace MiniUow
             }
 
             if (orderBy != null)
+            {
                 return await Task.Run(() => orderBy(query));
+            }
+
             return await Task.Run(() => query);
         }
 

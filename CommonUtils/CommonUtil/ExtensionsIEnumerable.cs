@@ -1,7 +1,7 @@
-﻿using System;
+﻿using MoreLinq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using MoreLinq;
 
 namespace CommonUtil
 {
@@ -126,7 +126,9 @@ namespace CommonUtil
                 double nextValue = doubles[index + 1];
                 sorted = nextValue >= previousValue;
                 if (!sorted)
+                {
                     break;
+                }
             }
 
             return sorted;

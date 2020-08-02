@@ -83,7 +83,10 @@ namespace MiniUow
             else
             {
                 var entity = _dbSet.Find(id);
-                if (entity != null) Delete(entity);
+                if (entity != null)
+                {
+                    Delete(entity);
+                }
             }
         }
 

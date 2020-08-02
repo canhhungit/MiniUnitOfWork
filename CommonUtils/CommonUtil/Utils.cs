@@ -48,7 +48,10 @@ namespace CommonUtil
         public static string formatNumber(object money, string format = Enums.FormatModel.Currency)
         {
             if (money.ToString().Equals("0") || long.Parse(money.ToString().Replace(",", "").Replace(".", "")) == 0)
+            {
                 return format.Equals(Enums.FormatModel.Currency) ? "0 đ" : "0";
+            }
+
             return String.Format(format, money);
         }
 
@@ -66,13 +69,17 @@ namespace CommonUtil
             DataTable table = new DataTable();
 
             foreach (PropertyDescriptor prop in properties)
-
+            {
                 table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+            }
+
             if (FHead)
             {
                 DataRow row = table.NewRow();
                 foreach (PropertyDescriptor prop in properties)
+                {
                     row[prop.Name] = prop.DisplayName ?? row[prop.Name];
+                }
             }
 
             foreach (T item in data)
@@ -80,8 +87,9 @@ namespace CommonUtil
                 DataRow row = table.NewRow();
 
                 foreach (PropertyDescriptor prop in properties)
-
+                {
                     row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
+                }
 
                 table.Rows.Add(row);
             }
@@ -92,11 +100,20 @@ namespace CommonUtil
         public static bool stringEquals(string a, string b)
         {
             if (string.IsNullOrEmpty(a) && string.IsNullOrEmpty(b))
+            {
                 return true;
+            }
+
             if (string.IsNullOrEmpty(a))
+            {
                 return false;
+            }
+
             if (string.IsNullOrEmpty(b))
+            {
                 return false;
+            }
+
             return string.Equals(a, b);
         }
 
@@ -134,47 +151,88 @@ namespace CommonUtil
         public static int CompareDate(this DateTime compare, DateTime obj, bool chekHours = false)
         {
             if (compare.Year > obj.Year)
+            {
                 return 1;
+            }
+
             if (compare.Year < obj.Year)
+            {
                 return -1;
+            }
+
             if (compare.Month > obj.Month)
+            {
                 return 1;
+            }
+
             if (compare.Month < obj.Month)
+            {
                 return -1;
+            }
+
             if (compare.Day > obj.Day)
+            {
                 return 1;
+            }
+
             if (compare.Day < obj.Day)
+            {
                 return -1;
+            }
+
             if (chekHours)
             {
                 if (compare.Hour > obj.Hour)
+                {
                     return 1;
+                }
+
                 if (compare.Hour < obj.Hour)
+                {
                     return -1;
+                }
+
                 if (compare.Minute > obj.Minute)
+                {
                     return 1;
+                }
+
                 if (compare.Minute < obj.Minute)
+                {
                     return -1;
+                }
+
                 if (compare.Second > obj.Second)
+                {
                     return 1;
+                }
+
                 if (compare.Second < obj.Second)
+                {
                     return -1;
+                }
             }
             return 0;
         }
         public static string PadCenter(this string s, int width, char c)
         {
-            if (s == null || width <= s.Length) return s;
+            if (s == null || width <= s.Length)
+            {
+                return s;
+            }
 
             int padding = width - s.Length;
             return s.PadLeft(s.Length + padding / 2, c).PadRight(width, c);
         }
 
-        const string temp = "-----------------------------------------------------------------------";
+        private const string temp = "-----------------------------------------------------------------------";
         public static string GetSpaceByLevel(int level)
         {
             if (level <= 0)
+            {
                 return string.Empty;
+            }
+
             return temp.Substring(0, level);
         }
 
@@ -215,13 +273,16 @@ namespace CommonUtil
         {
             //Tiến hành thay thế , lọc bỏ dấu cho chuỗi
             if (string.IsNullOrEmpty(str))
+            {
                 return str;
+            }
 
             for (int i = 1; i < VietnameseSigns.Length; i++)
             {
                 for (int j = 0; j < VietnameseSigns[i].Length; j++)
-
+                {
                     str = str.Replace(VietnameseSigns[i][j], VietnameseSigns[0][i - 1]);
+                }
             }
 
             return str;
@@ -230,7 +291,10 @@ namespace CommonUtil
         public static string ToStringSearch(string str)
         {
             if (string.IsNullOrEmpty(str))
+            {
                 return string.Empty;
+            }
+
             return RemoveSign4VietnameseString(str.ToLower());
         }
         public static string GetFriendlyTitle(string title, bool remapToAscii = false, int maxlength = 80)
@@ -384,7 +448,7 @@ namespace CommonUtil
             }
         }
 
-        private static char[] tcvnchars = {
+        private static readonly char[] tcvnchars = {
             'µ', '¸', '¶', '·', '¹',
             '¨', '»', '¾', '¼', '½', 'Æ',
             '©', 'Ç', 'Ê', 'È', 'É', 'Ë',
@@ -400,7 +464,7 @@ namespace CommonUtil
             '¡', '¢', '§', '£', '¤', '¥', '¦'
         };
 
-        private static char[] unichars = {
+        private static readonly char[] unichars = {
             'à', 'á', 'ả', 'ã', 'ạ',
             'ă', 'ằ', 'ắ', 'ẳ', 'ẵ', 'ặ',
             'â', 'ầ', 'ấ', 'ẩ', 'ẫ', 'ậ',
@@ -416,7 +480,7 @@ namespace CommonUtil
             'Ă', 'Â', 'Đ', 'Ê', 'Ô', 'Ơ', 'Ư'
         };
 
-        private static char[] convertTable;
+        private static readonly char[] convertTable;
 
 
         #region readXml

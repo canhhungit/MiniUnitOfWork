@@ -1,10 +1,10 @@
 ﻿using Newtonsoft.Json;
 using StackExchange.Redis;
 using System;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using System.Linq;
 
 namespace CommonUtil.Cache
 {
@@ -16,17 +16,23 @@ namespace CommonUtil.Cache
 
         public CacheRedisService(string connectionString)
         {
-            this._connectionString = connectionString;
+            _connectionString = connectionString;
         }
 
 
         private ConnectionMultiplexer GetConnection()
         {
-            if (_connection != null && _connection.IsConnected) return _connection;
+            if (_connection != null && _connection.IsConnected)
+            {
+                return _connection;
+            }
 
             lock (_lock)
             {
-                if (_connection != null && _connection.IsConnected) return _connection;
+                if (_connection != null && _connection.IsConnected)
+                {
+                    return _connection;
+                }
 
                 if (_connection != null)
                 {
@@ -56,7 +62,9 @@ namespace CommonUtil.Cache
         protected virtual T Deserialize<T>(byte[] serializedObject)
         {
             if (serializedObject == null)
+            {
                 return default(T);
+            }
 
             var jsonString = Encoding.UTF8.GetString(serializedObject);
             return JsonConvert.DeserializeObject<T>(jsonString);
@@ -82,9 +90,9 @@ namespace CommonUtil.Cache
             get
             {
                 long result = 0;
-                foreach (var ep in this.GetEndpoints())
+                foreach (var ep in GetEndpoints())
                 {
-                    var server = this.Server(ep);
+                    var server = Server(ep);
                     result += server.Keys().Count();
                 }
                 return result;
@@ -105,7 +113,7 @@ namespace CommonUtil.Cache
             Action<string, T> afterItemRemoved = null,
             Action<string, T> beforeItemRemoved = null) where T : class
         {
-            this.AddOrUpdate(key, value, null, null, afterItemRemoved, beforeItemRemoved);
+            AddOrUpdate(key, value, null, null, afterItemRemoved, beforeItemRemoved);
         }
 
         /// <summary>
@@ -124,7 +132,7 @@ namespace CommonUtil.Cache
             Action<string, T> afterItemRemoved = null,
             Action<string, T> beforeItemRemoved = null) where T : class
         {
-            this.AddOrUpdate(key, value, absoluteExpiration, null, afterItemRemoved, beforeItemRemoved);
+            AddOrUpdate(key, value, absoluteExpiration, null, afterItemRemoved, beforeItemRemoved);
         }
 
         /// <summary>
@@ -143,7 +151,7 @@ namespace CommonUtil.Cache
             Action<string, T> afterItemRemoved = null,
             Action<string, T> beforeItemRemoved = null) where T : class
         {
-            this.AddOrUpdate(key, value, null, slidingExpiration, afterItemRemoved, beforeItemRemoved);
+            AddOrUpdate(key, value, null, slidingExpiration, afterItemRemoved, beforeItemRemoved);
         }
 
         /// <summary>
@@ -151,9 +159,9 @@ namespace CommonUtil.Cache
         /// </summary>
         public void Clear()
         {
-            foreach (var ep in this.GetEndpoints())
+            foreach (var ep in GetEndpoints())
             {
-                var server = this.Server(ep);
+                var server = Server(ep);
                 //we can use the code below (commented)
                 //but it requires administration permission - ",allowAdmin=true"
                 //server.FlushDatabase();
@@ -161,7 +169,9 @@ namespace CommonUtil.Cache
                 //that's why we simply interate through all elements now
                 var keys = server.Keys();
                 foreach (var key in keys)
+                {
                     Database().KeyDelete(key);
+                }
             }
         }
 
@@ -173,7 +183,7 @@ namespace CommonUtil.Cache
         /// <exception cref="System.ArgumentNullException">key is null.</exception>
         public bool Contains(string key)
         {
-            return this.Database().KeyExists(key);
+            return Database().KeyExists(key);
         }
 
         /// <summary>
@@ -189,7 +199,9 @@ namespace CommonUtil.Cache
                 var server = Server(ep);
                 var keys = server.Keys(pattern: "*" + pattern + "*");
                 if (keys.Count() > 0)
+                {
                     return true;
+                }
             }
             return false;
         }
@@ -203,15 +215,20 @@ namespace CommonUtil.Cache
         /// <exception cref="System.ArgumentNullException">key is null.</exception>
         public T Get<T>(string key) where T : class
         {
-            if (this.Contains(key))
+            if (Contains(key))
             {
                 var rValue = Database().StringGet(key);
                 if (!rValue.HasValue)
+                {
                     return default(T);
+                }
+
                 return Deserialize<T>(rValue);
             }
             else
-                return default(T); ;
+            {
+                return default(T);
+            };
         }
 
         /// <summary>
@@ -230,7 +247,7 @@ namespace CommonUtil.Cache
             Action<string, T> afterItemRemoved = null,
             Action<string, T> beforeItemRemoved = null) where T : class
         {
-            return this.GetOrAdd(key, value, null, null, afterItemRemoved, beforeItemRemoved);
+            return GetOrAdd(key, value, null, null, afterItemRemoved, beforeItemRemoved);
         }
 
         /// <summary>
@@ -251,7 +268,7 @@ namespace CommonUtil.Cache
             Action<string, T> afterItemRemoved = null,
             Action<string, T> beforeItemRemoved = null) where T : class
         {
-            return this.GetOrAdd(key, value, absoluteExpiration, null, afterItemRemoved, beforeItemRemoved);
+            return GetOrAdd(key, value, absoluteExpiration, null, afterItemRemoved, beforeItemRemoved);
         }
 
         /// <summary>
@@ -272,7 +289,7 @@ namespace CommonUtil.Cache
             Action<string, T> afterItemRemoved = null,
             Action<string, T> beforeItemRemoved = null) where T : class
         {
-            return this.GetOrAdd(key, value, null, slidingExpiration, afterItemRemoved, beforeItemRemoved);
+            return GetOrAdd(key, value, null, slidingExpiration, afterItemRemoved, beforeItemRemoved);
         }
 
         /// <summary>
@@ -291,7 +308,7 @@ namespace CommonUtil.Cache
             Action<string, T> afterItemRemoved = null,
             Action<string, T> beforeItemRemoved = null) where T : class
         {
-            return this.GetOrAddAsync(key, value, null, null, afterItemRemoved, beforeItemRemoved);
+            return GetOrAddAsync(key, value, null, null, afterItemRemoved, beforeItemRemoved);
         }
 
         /// <summary>
@@ -312,7 +329,7 @@ namespace CommonUtil.Cache
             Action<string, T> afterItemRemoved = null,
             Action<string, T> beforeItemRemoved = null) where T : class
         {
-            return this.GetOrAddAsync(key, value, absoluteExpiration, null, afterItemRemoved, beforeItemRemoved);
+            return GetOrAddAsync(key, value, absoluteExpiration, null, afterItemRemoved, beforeItemRemoved);
         }
 
         /// <summary>
@@ -333,7 +350,7 @@ namespace CommonUtil.Cache
             Action<string, T> afterItemRemoved = null,
             Action<string, T> beforeItemRemoved = null) where T : class
         {
-            return this.GetOrAddAsync(key, value, null, slidingExpiration, afterItemRemoved, beforeItemRemoved);
+            return GetOrAddAsync(key, value, null, slidingExpiration, afterItemRemoved, beforeItemRemoved);
         }
 
         /// <summary>
@@ -343,8 +360,10 @@ namespace CommonUtil.Cache
         /// <exception cref="System.ArgumentNullException">key is null.</exception>
         public void Remove(string key)
         {
-            if (this.Contains(key))
-                this.Database().KeyDelete(key);
+            if (Contains(key))
+            {
+                Database().KeyDelete(key);
+            }
         }
         /// <summary>
         /// Removes items by pattern
@@ -357,7 +376,9 @@ namespace CommonUtil.Cache
                 var server = Server(ep);
                 var keys = server.Keys(pattern: "*" + pattern + "*");
                 foreach (var key in keys)
-                    this.Database().KeyDelete(key);
+                {
+                    Database().KeyDelete(key);
+                }
             }
         }
 
@@ -385,12 +406,12 @@ namespace CommonUtil.Cache
             Action<string, T> afterItemRemoved,
             Action<string, T> beforeItemRemoved) where T : class
         {
-            T value = this.Get<T>(key);
+            T value = Get<T>(key);
 
             if (value == null)
             {
                 value = getValue();
-                this.AddOrUpdate(
+                AddOrUpdate(
                     key,
                     value,
                     absoluteExpiration,
@@ -422,12 +443,12 @@ namespace CommonUtil.Cache
             Action<string, T> afterItemRemoved,
             Action<string, T> beforeItemRemoved) where T : class
         {
-            T value = this.Get<T>(key);
+            T value = Get<T>(key);
 
             if (value == null)
             {
                 value = await getValue();
-                this.AddOrUpdate(
+                AddOrUpdate(
                     key,
                     value,
                     absoluteExpiration,
@@ -459,16 +480,18 @@ namespace CommonUtil.Cache
         {
 
             if (value == null)
+            {
                 return;
+            }
 
             var entryBytes = Serialize(value);
             if (slidingExpiration.HasValue)
             {
-                this.Database().StringSet(key, entryBytes, slidingExpiration.Value);
+                Database().StringSet(key, entryBytes, slidingExpiration.Value);
             }
             else
             {
-                this.Database().StringSet(key, entryBytes);
+                Database().StringSet(key, entryBytes);
             }
 
         }

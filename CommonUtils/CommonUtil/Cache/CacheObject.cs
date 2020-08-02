@@ -73,9 +73,9 @@ namespace CommonUtil.Cache
         private readonly ICacheService cacheService;
         private readonly ICacheService cacheRedisService;
         public string Key;
-        Func<string, List<T>> Create;
-        Func<string, DateTime, DateTime, List<T>> Update;
-        Func<string, string> GetUpdateKey;
+        private readonly Func<string, List<T>> Create;
+        private readonly Func<string, DateTime, DateTime, List<T>> Update;
+        private readonly Func<string, string> GetUpdateKey;
         public DFCahce(Func<string, List<T>> _Create, Func<string, DateTime, DateTime, List<T>> _Update, Func<string, string> _GetUpdateKey)
         {
             Create = _Create;
@@ -102,8 +102,10 @@ namespace CommonUtil.Cache
         {
             var DateNow = DateTime.Now;
             var lstObj = Create(Key);
-            var result = new CacheListObject<T>(DateNow, lstObj);
-            result.KeyUpdate = GetUpdateKey(Key);
+            var result = new CacheListObject<T>(DateNow, lstObj)
+            {
+                KeyUpdate = GetUpdateKey(Key)
+            };
             return result;
         }
     }

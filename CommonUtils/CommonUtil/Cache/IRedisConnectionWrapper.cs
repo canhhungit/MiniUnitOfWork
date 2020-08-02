@@ -1,6 +1,6 @@
-﻿using System;
+﻿using StackExchange.Redis;
+using System;
 using System.Net;
-using StackExchange.Redis;
 
 namespace CommonUtil.Cache
 {

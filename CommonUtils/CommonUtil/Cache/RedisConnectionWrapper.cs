@@ -1,6 +1,5 @@
-﻿using System;
+﻿using StackExchange.Redis;
 using System.Net;
-using StackExchange.Redis;
 
 namespace CommonUtil.Cache
 {
@@ -13,16 +12,22 @@ namespace CommonUtil.Cache
 
         public RedisConnectionWrapper(string connectionString)
         {
-            this._connectionString = connectionString;
+            _connectionString = connectionString;
         }
 
         private ConnectionMultiplexer GetConnection()
         {
-            if (_connection != null && _connection.IsConnected) return _connection;
+            if (_connection != null && _connection.IsConnected)
+            {
+                return _connection;
+            }
 
             lock (_lock)
             {
-                if (_connection != null && _connection.IsConnected) return _connection;
+                if (_connection != null && _connection.IsConnected)
+                {
+                    return _connection;
+                }
 
                 if (_connection != null)
                 {
