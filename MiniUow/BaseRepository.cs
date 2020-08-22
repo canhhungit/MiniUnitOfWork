@@ -443,6 +443,36 @@ namespace MiniUow
             return orderBy != null ? orderBy(query) : query;
         }
 
+        public virtual IQueryable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, Expression<Func<T, bool>> predicate = null,
+           Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+           Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
+           bool disableTracking = true,
+           bool ignoreQueryFilters = false)
+        {
+            IQueryable<T> query = _dbSet;
+            if (disableTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            if (include != null)
+            {
+                query = include(query);
+            }
+
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
+
+            if (ignoreQueryFilters)
+            {
+                query = query.IgnoreQueryFilters();
+            }
+
+            return orderBy != null ? orderBy(query).Select(selector) : query.Select(selector);
+        }
+
         public virtual async Task<IQueryable<T>> GetAllAsync(Expression<Func<T, bool>> predicate = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
@@ -476,6 +506,41 @@ namespace MiniUow
             }
 
             return await Task.Run(() => query);
+        }
+
+        public virtual async Task<IQueryable<TResult>> GetAllAsync<TResult>(Expression<Func<T, TResult>> selector, Expression<Func<T, bool>> predicate = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
+            bool disableTracking = true,
+            bool ignoreQueryFilters = false)
+        {
+            IQueryable<T> query = _dbSet;
+            if (disableTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            if (include != null)
+            {
+                query = include(query);
+            }
+
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
+
+            if (ignoreQueryFilters)
+            {
+                query = query.IgnoreQueryFilters();
+            }
+
+            if (orderBy != null)
+            {
+                return await Task.Run(() => orderBy(query).Select(selector));
+            }
+
+            return await Task.Run(() => query.Select(selector));
         }
 
         public virtual IQueryable<T> GetAll()

@@ -345,6 +345,12 @@ namespace MiniUow
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
             bool disableTracking = true, bool ignoreQueryFilters = false);
 
+        IQueryable<TResult> GetAll<TResult>(Expression<Func<T, TResult>> selector, Expression<Func<T, bool>> predicate = null,
+           Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+           Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
+           bool disableTracking = true,
+           bool ignoreQueryFilters = false);
+
         /// <summary>
         /// Gets all entities. This method is not recommended
         /// </summary>
@@ -363,5 +369,11 @@ namespace MiniUow
           Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
           Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
           bool disableTracking = true, bool ignoreQueryFilters = false);
+
+        Task<IQueryable<TResult>> GetAllAsync<TResult>(Expression<Func<T, TResult>> selector, Expression<Func<T, bool>> predicate = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
+            bool disableTracking = true,
+            bool ignoreQueryFilters = false);
     }
 }
