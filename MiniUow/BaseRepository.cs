@@ -548,6 +548,16 @@ namespace MiniUow
             return _dbSet;
         }
 
+        public virtual bool Any(Expression<Func<T, bool>> predicate = null)
+        {
+            return _dbSet.Any(predicate);
+        }
+
+        public virtual async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate = null)
+        {
+            return await _dbSet.AnyAsync(predicate);
+        }
+
         public async Task<IList<T>> GetAllAsync()
         {
             return await _dbSet.ToListAsync();

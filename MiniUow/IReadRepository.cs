@@ -211,6 +211,9 @@ namespace MiniUow
               Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
               bool disableTracking = true, bool ignoreQueryFilters = false);
 
+        Task<bool> AnyAsync(Expression<Func<T, bool>> predicate = null);
+        bool Any(Expression<Func<T, bool>> predicate = null);
+
         /// <summary>
         /// Gets the first or default entity based on a predicate, orderby delegate and include delegate. This method default no-tracking query.
         /// </summary>
