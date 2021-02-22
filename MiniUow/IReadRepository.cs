@@ -196,7 +196,7 @@ namespace MiniUow
                                            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
                                            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
                                            bool disableTracking = true,
-                                           bool ignoreQueryFilters = false);
+                                           bool ignoreQueryFilters = false) where TResult : class;
 
         /// <summary>
         /// Gets the first or default entity based on a predicate, orderby delegate and include delegate. This method default no-tracking query.
@@ -243,7 +243,7 @@ namespace MiniUow
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
             bool disableTracking = true,
-            bool ignoreQueryFilters = false);
+            bool ignoreQueryFilters = false) where TResult : class;
 
         /// <summary>
         /// Gets the <see cref="IPagedList{T}"/> based on a predicate, orderby delegate and page information.
@@ -326,7 +326,7 @@ namespace MiniUow
             int pageSize = 20,
             bool disableTracking = true,
             CancellationToken cancellationToken = default(CancellationToken),
-            bool ignoreQueryFilters = false);
+            bool ignoreQueryFilters = false) where TResult : class;
 
         /// <summary>
         /// Gets all entities. This method is not recommended
@@ -352,7 +352,7 @@ namespace MiniUow
            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
            bool disableTracking = true,
-           bool ignoreQueryFilters = false);
+           bool ignoreQueryFilters = false) where TResult : class;
 
         /// <summary>
         /// Gets all entities. This method is not recommended
@@ -377,6 +377,6 @@ namespace MiniUow
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
             bool disableTracking = true,
-            bool ignoreQueryFilters = false);
+            bool ignoreQueryFilters = false) where TResult : class;
     }
 }

@@ -377,7 +377,7 @@ namespace MiniUow
             int pageSize = 20,
             bool disableTracking = true,
             CancellationToken cancellationToken = default,
-            bool ignoreQueryFilters = false)
+            bool ignoreQueryFilters = false) where TResult : class
         {
 
             IQueryable<T> query = _dbSet;
@@ -447,7 +447,7 @@ namespace MiniUow
            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
            Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
            bool disableTracking = true,
-           bool ignoreQueryFilters = false)
+           bool ignoreQueryFilters = false) where TResult : class
         {
             IQueryable<T> query = _dbSet;
             if (disableTracking)
@@ -512,7 +512,7 @@ namespace MiniUow
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
             Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
             bool disableTracking = true,
-            bool ignoreQueryFilters = false)
+            bool ignoreQueryFilters = false) where TResult : class
         {
             IQueryable<T> query = _dbSet;
             if (disableTracking)
@@ -577,7 +577,7 @@ namespace MiniUow
                                                  Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
                                                  Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
                                                  bool disableTracking = true,
-                                                 bool ignoreQueryFilters = false)
+                                                 bool ignoreQueryFilters = false) where TResult : class
         {
             IQueryable<T> query = _dbSet;
 
@@ -625,7 +625,7 @@ namespace MiniUow
                                               Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
                                               Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null,
                                               bool disableTracking = true,
-                                              bool ignoreQueryFilters = false)
+                                              bool ignoreQueryFilters = false) where TResult : class
         {
             IQueryable<T> query = _dbSet;
 
