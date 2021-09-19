@@ -7,8 +7,9 @@ A simple lean & clean generic repository pattern and unit of work for .net core 
 [![NuGet Badge](https://buildstats.info/nuget/MiniUow)](https://www.nuget.org/packages/MiniUow/)
 
 MiniUow supports the following platforms:
-.NET 4.5.2+
-.NET Platform Standard 2.0
+
+.NET Platform Standard
+
 .NET Core
 
 ## Installation
@@ -36,12 +37,15 @@ public void ConfigureServices(IServiceCollection services)
 {
     //---------Other Code-----------
 	//.AddUnitOfWork<SampleContext>();
+    
     //Sample for SQL Server:
     services.AddDbContext<SampleContext>(options =>
         options.UseSqlServer(Configuration.GetConnectionString("SampleDatabase"))).AddUnitOfWork<SampleContext>();
+	
 	//Sample for Postgresql:
     //services.AddEntityFrameworkNpgsql().AddDbContext<SampleContext>(opt =>
     //    opt.UseNpgsql(Configuration.GetConnectionString("SampleDatabase"))).AddUnitOfWork<SampleContext>();
+    
     //Sample for MySQL:
     //services.AddDbContext<SampleContext>(options => 
     //    options.UseMySql(Configuration.GetConnectionString("SampleDatabase"))).AddUnitOfWork<SampleContext>();
@@ -59,38 +63,50 @@ public ClassConstructor(IUnitOfWork unit)
 
 public async Task ActionMethod(string value)
 {
-    //Exists, ExistsAsync, Count, CountAsync, Query, Find, FindAsync, Single, SingleAsync
-    //GetPagedList, GetPagedListAsync, GetAll, GetAllAsync
-
-    //Demo method
-	bool isExists = _uow.GetRepository<TblUser>().Exists(p => p.Username == value);
-	isExists = await _uow.GetRepository<TblUser>().ExistsAsync(p => p.Username == value);
+    //Demo Exists method
+    bool isExists = _uow.GetRepository<TblUser>().Exists(p => p.Username == value);
+    isExists = await _uow.GetRepository<TblUser>().ExistsAsync(p => p.Username == value);
 	
-	var query = _uow.GetRepository<TblUser>().GetPagedList(index: 0, size: int.MaxValue);
+    //Get with size
+    var query = _uow.GetRepository<TblUser>().GetPagedList(index: 0, size: int.MaxValue);
+    
+    //Get with predicate
     var data = _uow.GetRepository<TblUser>().GetPagedList(
        predicate: p => p.Username.Contains(value) || p.Email.Contains(value) || p.Name.Contains(value),
        orderBy: p => p.OrderBy(p => p.Username),
        include: p => p.Include(x => x.TblUserGroup),
        index: 0,
        size: 20);
+       
+    //Get with predicate dynamic
+    var data = _uow.GetRepository<TblUser>().GetPagedList(
+       predicate: "Username = '" + value + "'",
+       orderBy: "Username desc"),
+       include: p => p.Include(x => x.TblUserGroup),
+       index: 0,
+       size: 20);
+       
+    //Get with predicate and return another Class
     var items = _uow.GetRepository<TblUser>().GetPagedList(b => new { Username = b.Username, Name = b.Name });
-
-    var users = _uow.GetRepository<TblUser>().GetAll();
-    var userGroups = _uow.GetRepository<TblUserGroup>().GetAll();
-
-    var user = _uow.GetRepository<TblUser>().Find(value);
-    user = _uow.GetRepository<TblUser>().Single(p => p.Username == value);
 }
 
 public TblUser Create()
 {
-    //Add, AddAsync, Delete, Update
-    var user =new TblUser();
-    user.Password = CreatePasswordHash(password);
+    var user = new TblUser();
+    user.Username = "MiniUow";
     user.CreateDate = DateTime.Now;
     var data = _uow.GetRepository<TblUser>().Add(user);
     _uow.SaveChanges();
     return data;
+}
+
+public void Update(string value)
+{
+    // If update data get funtion, need add disableTracking: false because default is true 
+    var user = _uow.GetRepository<TblUser>().FirstOrDefault( p=> p.Username == value, disableTracking: false);
+    user.UpdateDate = DateTime.Now;
+    var data = _uow.GetRepository<TblUser>().Update(user);
+    _uow.SaveChanges();
 }
 ```
 ## Donate

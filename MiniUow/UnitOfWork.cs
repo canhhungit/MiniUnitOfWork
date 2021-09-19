@@ -52,13 +52,8 @@ namespace MiniUow
             return Context.SaveChanges();
         }
 
-        public async Task<int> SaveChangesAsync(bool ensureAutoHistory = false)
+        public async Task<int> SaveChangesAsync()
         {
-            if (ensureAutoHistory)
-            {
-                Context.EnsureAutoHistory();
-            }
-
             return await Context.SaveChangesAsync();
         }
 

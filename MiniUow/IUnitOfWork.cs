@@ -30,7 +30,7 @@ namespace MiniUow
         /// Saves all changes made in this context to the database.
         /// </summary>
         /// <returns></returns>
-        Task<int> SaveChangesAsync(bool ensureAutoHistory = false);
+        Task<int> SaveChangesAsync();
     }
 
     public interface IUnitOfWork<TContext> : IUnitOfWork where TContext : DbContext
