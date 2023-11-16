@@ -16,6 +16,7 @@ namespace MiniUow
         where TContext : DbContext, IDisposable
     {
         private Dictionary<Type, object> _repositories;
+ 	    private bool disposed = false;
 
         public UnitOfWork(TContext context)
         {
@@ -56,10 +57,31 @@ namespace MiniUow
         {
             return await Context.SaveChangesAsync();
         }
-
+        
         public void Dispose()
         {
-            Context?.Dispose();
+            Dispose(true);
+  	        GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    // clear repositories
+                    if (_repositories != null)
+                    {
+                        _repositories.Clear();
+                    }
+
+                    // dispose the db context.
+                    Context.Dispose();
+                }
+            }
+
+            disposed = true;
         }
     }
 }

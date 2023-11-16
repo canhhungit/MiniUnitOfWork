@@ -14,10 +14,11 @@
     <PackageTags>GenericRepositoryPattern UnitOfWorkPattern .NetCore Entity Framework Core entity-framework-core EF Data O/RM unitofwork Unit Of Work unit-of-work</PackageTags>
     <PackageReleaseNotes>Add function getall with selector</PackageReleaseNotes>
     <NeutralLanguage>en</NeutralLanguage>
-    <Version>2.0.1</Version>
+    <Version>3.0.0</Version>
     <PackageIcon></PackageIcon>
     <PackageIconUrl />
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,6 +26,7 @@
     <Compile Remove="IRepositoryReadOnly.cs" />
     <Compile Remove="RepositoryAsync.cs" />
     <Compile Remove="RepositoryReadOnly.cs" />
+	<None Include="README.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
 
   <ItemGroup>
