@@ -3,7 +3,7 @@ name: Publish NuGet (GitHub Packages)
 on:
   push:
     tags:
-      - "v*"
+      - 'v*'
 
 permissions:
   contents: read
@@ -19,18 +19,23 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "8.0.x"
+          dotnet-version: '8.0.x'
 
-      - name: Pack
-        shell: bash
+      - name: Build
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
-          echo "VERSION=${VERSION}" >> "$GITHUB_ENV"
+          dotnet build MiniUow/MiniUow.csproj \
+            -c Release \
+            /p:Version="$VERSION"
+
+      - name: Pack
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
           dotnet pack MiniUow/MiniUow.csproj \
             -c Release \
             -o ./artifacts \
-            /p:PackageVersion="$VERSION" \
-            /p:ContinuousIntegrationBuild=true
+            --no-build \
+            /p:PackageVersion="$VERSION"
 
       - name: Publish to GitHub Packages
         run: |
