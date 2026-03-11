@@ -26,7 +26,10 @@ namespace MiniUow
         public IRepository<TEntity> GetRepository<TEntity>() where TEntity : class
         {
             ThrowIfDisposed();
-            _repositories ??= new Dictionary<Type, object>();
+            if (_repositories == null)
+            {
+                _repositories = new Dictionary<Type, object>();
+            }
             var type = typeof(TEntity);
             if (!_repositories.TryGetValue(type, out var repository))
             {

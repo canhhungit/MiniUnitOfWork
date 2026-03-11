@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CommonUtils", "CommonUtils"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonUtil", "CommonUtils\CommonUtil\CommonUtil.csproj", "{46DCA0D1-3947-4AEF-A153-197EB505278B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniUow.Tests", "MiniUow.Tests\MiniUow.Tests.csproj", "{01E28710-66F1-4EAB-BC3B-9AE4FDD5AFD4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{46DCA0D1-3947-4AEF-A153-197EB505278B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46DCA0D1-3947-4AEF-A153-197EB505278B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46DCA0D1-3947-4AEF-A153-197EB505278B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01E28710-66F1-4EAB-BC3B-9AE4FDD5AFD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01E28710-66F1-4EAB-BC3B-9AE4FDD5AFD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01E28710-66F1-4EAB-BC3B-9AE4FDD5AFD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01E28710-66F1-4EAB-BC3B-9AE4FDD5AFD4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
