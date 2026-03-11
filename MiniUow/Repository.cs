@@ -117,9 +117,6 @@ namespace MiniUow
         }
 
 
-        public void Dispose()
-        {
-            _dbContext?.Dispose();
-        }
+
     }
 }

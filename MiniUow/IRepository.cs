@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace MiniUow
 {
-    public interface IRepository<T> : IReadRepository<T>, IDisposable where T : class
+    public interface IRepository<T> : IReadRepository<T> where T : class
     {
         /// <summary>
         /// Executes the specified raw SQL command.
