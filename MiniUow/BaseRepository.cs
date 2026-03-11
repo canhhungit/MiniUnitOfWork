@@ -291,15 +291,15 @@ namespace MiniUow
 
         #endregion Sum
 
-        public virtual IQueryable<T> Query(string sql, params object[] parameters) => _dbSet.FromSql(sql, parameters);
+        public virtual IQueryable<T> Query(string sql, params object[] parameters) => _dbSet.FromSqlRaw(sql, parameters);
 
         #region FindAsync
 
         public virtual T Find(params object[] keyValues) => _dbSet.Find(keyValues);
 
-        public virtual async Task<T> FindAsync(params object[] keyValues) => await _dbSet.FindAsync(keyValues).ConfigureAwait(false);
+        public virtual async Task<T> FindAsync(params object[] keyValues) => await _dbSet.FindAsync(keyValues).AsTask().ConfigureAwait(false);
 
-        public virtual Task<T> FindAsync(object[] keyValues, CancellationToken cancellationToken) => _dbSet.FindAsync(keyValues, cancellationToken);
+        public virtual Task<T> FindAsync(object[] keyValues, CancellationToken cancellationToken) => _dbSet.FindAsync(keyValues, cancellationToken).AsTask();
 
         #endregion FindAsync
 

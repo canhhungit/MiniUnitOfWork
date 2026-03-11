@@ -21,7 +21,7 @@ namespace MiniUow
         {
         }
 
-        public virtual int ExecuteSqlCommand(string sql, params object[] parameters) => _dbContext.Database.ExecuteSqlCommand(sql, parameters);
+        public virtual int ExecuteSqlCommand(string sql, params object[] parameters) => _dbContext.Database.ExecuteSqlRaw(sql, parameters);
 
         //public IQueryable<T> FromSql<T>(string sql, params object[] parameters) where T : class => _dbContext.Set<T>().FromSqlRaw(sql, parameters);
 
