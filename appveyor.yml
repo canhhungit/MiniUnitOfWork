@@ -1,0 +1,9 @@
+image: Visual Studio 2022
+
+install:
+  - ps: |
+      choco install dotnet-6.0-sdk -y
+      dotnet --list-sdks
+
+build_script:
+  - cmd: dotnet test MiniUow.sln
