@@ -15,8 +15,6 @@ namespace MiniUow.Paging
     {
         internal Paginate(IEnumerable<T> source, int index, int size, int from)
         {
-            var enumerable = source as T[] ?? source.ToArray();
-
             if (from > index)
             {
                 throw new ArgumentException($"indexFrom: {from} > pageIndex: {index}, must indexFrom <= pageIndex");
@@ -34,11 +32,13 @@ namespace MiniUow.Paging
             }
             else
             {
+                var enumerable = source as ICollection<T> ?? source.ToArray();
+
                 Index = index;
                 Size = size;
                 From = from;
 
-                Count = enumerable.Count();
+                Count = enumerable.Count;
                 Pages = (int)Math.Ceiling(Count / (double)Size);
 
                 Items = enumerable.Skip((Index - From) * Size).Take(Size);
@@ -66,8 +66,6 @@ namespace MiniUow.Paging
         public Paginate(IEnumerable<TSource> source, Func<IEnumerable<TSource>, IEnumerable<TResult>> converter,
             int index, int size, int from)
         {
-            var enumerable = source as TSource[] ?? source.ToArray();
-
             if (from > index)
             {
                 throw new ArgumentException($"From: {from} > Index: {index}, must From <= Index");
@@ -87,10 +85,12 @@ namespace MiniUow.Paging
             }
             else
             {
+                var enumerable = source as ICollection<TSource> ?? source.ToArray();
+
                 Index = index;
                 Size = size;
                 From = from;
-                Count = enumerable.Count();
+                Count = enumerable.Count;
                 Pages = (int)Math.Ceiling(Count / (double)Size);
 
                 var items = enumerable.Skip((Index - From) * Size).Take(Size).ToArray();

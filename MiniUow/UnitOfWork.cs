@@ -16,7 +16,7 @@ namespace MiniUow
         where TContext : DbContext, IDisposable
     {
         private Dictionary<Type, object> _repositories;
- 	    private bool disposed = false;
+        private bool _disposed;
 
         public UnitOfWork(TContext context)
         {
@@ -25,37 +25,30 @@ namespace MiniUow
 
         public IRepository<TEntity> GetRepository<TEntity>() where TEntity : class
         {
-            if (_repositories == null)
-            {
-                _repositories = new Dictionary<Type, object>();
-            }
-
+            ThrowIfDisposed();
+            _repositories ??= new Dictionary<Type, object>();
             var type = typeof(TEntity);
-            if (!_repositories.ContainsKey(type))
+            if (!_repositories.TryGetValue(type, out var repository))
             {
-                _repositories[type] = new Repository<TEntity>(Context);
-                return (IRepository<TEntity>)_repositories[type];
+                repository = new Repository<TEntity>(Context);
+                _repositories[type] = repository;
             }
 
-            //var typeRp = typeof(IRepository<TEntity>);
-            //if (!_repositories.ContainsValue(typeRp))
-            //{
-            //    _repositories[type] = new Repository<TEntity>(Context);
-            //}
-
-            return (IRepository<TEntity>)_repositories[type];
+            return (IRepository<TEntity>)repository;
         }
 
         public TContext Context { get; }
 
         public int SaveChanges()
         {
+            ThrowIfDisposed();
             return Context.SaveChanges();
         }
 
         public async Task<int> SaveChangesAsync()
         {
-            return await Context.SaveChangesAsync();
+            ThrowIfDisposed();
+            return await Context.SaveChangesAsync().ConfigureAwait(false);
         }
         
         public void Dispose()
@@ -66,22 +59,29 @@ namespace MiniUow
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposed)
+            if (_disposed)
             {
-                if (disposing)
-                {
-                    // clear repositories
-                    if (_repositories != null)
-                    {
-                        _repositories.Clear();
-                    }
-
-                    // dispose the db context.
-                    Context.Dispose();
-                }
+                return;
             }
 
-            disposed = true;
+            if (disposing)
+            {
+                // clear repositories
+                _repositories?.Clear();
+
+                // dispose the db context.
+                Context.Dispose();
+            }
+
+            _disposed = true;
+        }
+
+        private void ThrowIfDisposed()
+        {
+            if (_disposed)
+            {
+                throw new ObjectDisposedException(GetType().Name);
+            }
         }
     }
 }

@@ -24,7 +24,7 @@ namespace MiniUow
 
         public BaseRepository(DbContext context)
         {
-            _dbContext = context ?? throw new ArgumentException(nameof(context));
+            _dbContext = context ?? throw new ArgumentNullException(nameof(context));
             _dbSet = _dbContext.Set<T>();
         }
 
@@ -581,12 +581,17 @@ namespace MiniUow
 
         public virtual bool Any(Expression<Func<T, bool>> predicate = null)
         {
-            return _dbSet.Any(predicate);
+            return predicate == null ? _dbSet.Any() : _dbSet.Any(predicate);
         }
 
         public virtual async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate = null)
         {
-            return await _dbSet.AnyAsync(predicate);
+            if (predicate == null)
+            {
+                return await _dbSet.AnyAsync().ConfigureAwait(false);
+            }
+
+            return await _dbSet.AnyAsync(predicate).ConfigureAwait(false);
         }
 
         #endregion Any
