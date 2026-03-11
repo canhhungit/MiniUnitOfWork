@@ -118,14 +118,7 @@ namespace MiniUow
 
         public virtual async Task<bool> ExistsAsync(Expression<Func<T, bool>> selector = null)
         {
-            if (selector == null)
-            {
-                return await _dbSet.AnyAsync();
-            }
-            else
-            {
-                return await _dbSet.AnyAsync(selector);
-            }
+            return await AnyAsync(selector).ConfigureAwait(false);
         }
 
         #endregion Exists
@@ -148,11 +141,11 @@ namespace MiniUow
         {
             if (predicate == null)
             {
-                return await _dbSet.CountAsync();
+                return await _dbSet.CountAsync().ConfigureAwait(false);
             }
             else
             {
-                return await _dbSet.CountAsync(predicate);
+                return await _dbSet.CountAsync(predicate).ConfigureAwait(false);
             }
         }
 
@@ -176,11 +169,11 @@ namespace MiniUow
         {
             if (predicate == null)
             {
-                return await _dbSet.LongCountAsync();
+                return await _dbSet.LongCountAsync().ConfigureAwait(false);
             }
             else
             {
-                return await _dbSet.LongCountAsync(predicate);
+                return await _dbSet.LongCountAsync(predicate).ConfigureAwait(false);
             }
         }
 
@@ -204,11 +197,11 @@ namespace MiniUow
         {
             if (predicate == null)
             {
-                return await _dbSet.MaxAsync(selector);
+                return await _dbSet.MaxAsync(selector).ConfigureAwait(false);
             }
             else
             {
-                return await _dbSet.Where(predicate).MaxAsync(selector);
+                return await _dbSet.Where(predicate).MaxAsync(selector).ConfigureAwait(false);
             }
         }
 
@@ -232,11 +225,11 @@ namespace MiniUow
         {
             if (predicate == null)
             {
-                return await _dbSet.MinAsync(selector);
+                return await _dbSet.MinAsync(selector).ConfigureAwait(false);
             }
             else
             {
-                return await _dbSet.Where(predicate).MinAsync(selector);
+                return await _dbSet.Where(predicate).MinAsync(selector).ConfigureAwait(false);
             }
         }
 
@@ -260,11 +253,11 @@ namespace MiniUow
         {
             if (predicate == null)
             {
-                return await _dbSet.AverageAsync(selector);
+                return await _dbSet.AverageAsync(selector).ConfigureAwait(false);
             }
             else
             {
-                return await _dbSet.Where(predicate).AverageAsync(selector);
+                return await _dbSet.Where(predicate).AverageAsync(selector).ConfigureAwait(false);
             }
         }
 
@@ -288,11 +281,11 @@ namespace MiniUow
         {
             if (predicate == null)
             {
-                return await _dbSet.SumAsync(selector);
+                return await _dbSet.SumAsync(selector).ConfigureAwait(false);
             }
             else
             {
-                return await _dbSet.Where(predicate).SumAsync(selector);
+                return await _dbSet.Where(predicate).SumAsync(selector).ConfigureAwait(false);
             }
         }
 
@@ -304,7 +297,7 @@ namespace MiniUow
 
         public virtual T Find(params object[] keyValues) => _dbSet.Find(keyValues);
 
-        public virtual async Task<T> FindAsync(params object[] keyValues) => await _dbSet.FindAsync(keyValues);
+        public virtual async Task<T> FindAsync(params object[] keyValues) => await _dbSet.FindAsync(keyValues).ConfigureAwait(false);
 
         public virtual Task<T> FindAsync(object[] keyValues, CancellationToken cancellationToken) => _dbSet.FindAsync(keyValues, cancellationToken);
 
@@ -327,7 +320,7 @@ namespace MiniUow
             bool ignoreQueryFilters = false)
         {
             var query = BuildQuery(predicate, orderBy, include, disableTracking, ignoreQueryFilters);
-            return await query.SingleOrDefaultAsync();
+            return await query.SingleOrDefaultAsync().ConfigureAwait(false);
         }
 
         #endregion Single
@@ -359,7 +352,9 @@ namespace MiniUow
             CancellationToken cancellationToken = default(CancellationToken),
             bool ignoreQueryFilters = false)
         {
-            return await BuildQuery(predicate, orderBy, include, disableTracking, ignoreQueryFilters).ToPaginateAsync(index, size, 0, cancellationToken);
+            return await BuildQuery(predicate, orderBy, include, disableTracking, ignoreQueryFilters)
+                .ToPaginateAsync(index, size, 0, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         public virtual async Task<IPaginate<T>> GetPagedListAsync(string predicate = null,
@@ -371,7 +366,9 @@ namespace MiniUow
            CancellationToken cancellationToken = default(CancellationToken),
            bool ignoreQueryFilters = false)
         {
-            return await BuildQuery(predicate, orderBy, include, disableTracking, ignoreQueryFilters).ToPaginateAsync(index, size, 0, cancellationToken);
+            return await BuildQuery(predicate, orderBy, include, disableTracking, ignoreQueryFilters)
+                .ToPaginateAsync(index, size, 0, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         public virtual IPaginate<TResult> GetPagedList<TResult>(Expression<Func<T, TResult>> selector,
@@ -408,36 +405,8 @@ namespace MiniUow
             CancellationToken cancellationToken = default,
             bool ignoreQueryFilters = false) where TResult : class
         {
-            IQueryable<T> query = _dbSet;
-
-            if (disableTracking)
-            {
-                query = query.AsNoTracking();
-            }
-
-            if (include != null)
-            {
-                query = include(query);
-            }
-
-            if (predicate != null)
-            {
-                query = query.Where(predicate);
-            }
-
-            if (ignoreQueryFilters)
-            {
-                query = query.IgnoreQueryFilters();
-            }
-
-            if (orderBy != null)
-            {
-                return await orderBy(query).Select(selector).ToPaginateAsync(pageIndex, pageSize, 0, cancellationToken);
-            }
-            else
-            {
-                return await query.Select(selector).ToPaginateAsync(pageIndex, pageSize, 0, cancellationToken);
-            }
+            var query = BuildQuery(predicate, orderBy, include, disableTracking, ignoreQueryFilters);
+            return await query.Select(selector).ToPaginateAsync(pageIndex, pageSize, 0, cancellationToken).ConfigureAwait(false);
         }
 
         public virtual async Task<IPaginate<TResult>> GetPagedListAsync<TResult>(Expression<Func<T, TResult>> selector,
@@ -450,36 +419,8 @@ namespace MiniUow
           CancellationToken cancellationToken = default,
           bool ignoreQueryFilters = false) where TResult : class
         {
-            IQueryable<T> query = _dbSet;
-
-            if (disableTracking)
-            {
-                query = query.AsNoTracking();
-            }
-
-            if (include != null)
-            {
-                query = include(query);
-            }
-
-            if (predicate != null)
-            {
-                query = query.Where(predicate);
-            }
-
-            if (ignoreQueryFilters)
-            {
-                query = query.IgnoreQueryFilters();
-            }
-
-            if (orderBy != null)
-            {
-                return await query.OrderBy(orderBy).Select(selector).ToPaginateAsync(pageIndex, pageSize, 0, cancellationToken);
-            }
-            else
-            {
-                return await query.Select(selector).ToPaginateAsync(pageIndex, pageSize, 0, cancellationToken);
-            }
+            var query = BuildQuery(predicate, orderBy, include, disableTracking, ignoreQueryFilters);
+            return await query.Select(selector).ToPaginateAsync(pageIndex, pageSize, 0, cancellationToken).ConfigureAwait(false);
         }
 
         #endregion GetPagedList
@@ -641,7 +582,7 @@ namespace MiniUow
             bool disableTracking = true,
             bool ignoreQueryFilters = false)
         {
-            return await BuildQuery(predicate, orderBy, include, disableTracking, ignoreQueryFilters).FirstOrDefaultAsync();
+            return await BuildQuery(predicate, orderBy, include, disableTracking, ignoreQueryFilters).FirstOrDefaultAsync().ConfigureAwait(false);
         }
 
         public virtual async Task<T> FirstOrDefaultAsync(string predicate = null,
@@ -650,7 +591,7 @@ namespace MiniUow
             bool disableTracking = true,
             bool ignoreQueryFilters = false)
         {
-            return await BuildQuery(predicate, orderBy, include, disableTracking, ignoreQueryFilters).FirstOrDefaultAsync();
+            return await BuildQuery(predicate, orderBy, include, disableTracking, ignoreQueryFilters).FirstOrDefaultAsync().ConfigureAwait(false);
         }
 
         public virtual async Task<TResult> FirstOrDefaultAsync<TResult>(Expression<Func<T, TResult>> selector,
@@ -660,7 +601,7 @@ namespace MiniUow
                                               bool disableTracking = true,
                                               bool ignoreQueryFilters = false) where TResult : class
         {
-            return await BuildQuery(predicate, orderBy, include, disableTracking, ignoreQueryFilters).Select(selector).FirstOrDefaultAsync();
+            return await BuildQuery(predicate, orderBy, include, disableTracking, ignoreQueryFilters).Select(selector).FirstOrDefaultAsync().ConfigureAwait(false);
         }
 
         public virtual async Task<TResult> FirstOrDefaultAsync<TResult>(Expression<Func<T, TResult>> selector,
@@ -670,7 +611,7 @@ namespace MiniUow
                                             bool disableTracking = true,
                                             bool ignoreQueryFilters = false) where TResult : class
         {
-            return await BuildQuery(predicate, orderBy, include, disableTracking, ignoreQueryFilters).Select(selector).FirstOrDefaultAsync();
+            return await BuildQuery(predicate, orderBy, include, disableTracking, ignoreQueryFilters).Select(selector).FirstOrDefaultAsync().ConfigureAwait(false);
         }
 
         #endregion FirstOrDefault
